@@ -1,0 +1,69 @@
+.header-row {
+    padding: 15px;
+    font-size: 25px;
+    font-weight: bold;
+}
+
+.contents-list {
+    font-size: 20px;
+    table-layout: fixed;
+    width: 1000px;
+    margin-top: 30px;
+    margin-bottom: 60px;
+    background-color: lightgray;
+    border-radius: .5rem;
+    padding: 5px;
+}
+
+.contents-add {
+    background-color: lightgray;
+    border-radius: .5rem;
+    font-size: 20px;
+    margin-bottom: 60px;
+    margin-top: 30px;
+    padding: 5px;
+
+}
+
+.table-header {
+    font-weight: bold;
+}
+
+body {
+    width: 1000px;
+    margin: auto;
+    margin-top: 20px;
+}
+
+nav a {
+    text-decoration: none;
+    color: black;
+    padding: 30px;
+}
+
+footer, .header-row {
+    background-color: lightsteelblue;
+    border-radius: .5rem;
+}
+
+footer {
+    position: fixed;
+    width: 970px;
+    bottom: 0;
+    padding: 15px;
+    font-size: 20px;
+    margin-bottom: 20px;
+}
+
+label {
+    width: 20em;
+    display: inline-block;
+    text-align: right;
+}
+
+input[type="text"], select {
+    width: 200px;
+    box-sizing: border-box;
+    height: 22px;
+    margin-bottom: 5px;
+}
