@@ -10,13 +10,13 @@
     width: 1000px;
     margin-top: 30px;
     margin-bottom: 60px;
-    background-color: lightgray;
+    background-color: lightsteelblue;
     border-radius: .5rem;
     padding: 5px;
 }
 
 .contents-add {
-    background-color: lightgray;
+    background-color: lightsteelblue;
     border-radius: .5rem;
     font-size: 20px;
     margin-bottom: 60px;
@@ -24,15 +24,15 @@
     padding: 5px;
 
 }
-
-.table-header {
-    font-weight: bold;
+thead {
+    text-align: left;
 }
+
 
 body {
     width: 1000px;
     margin: auto;
-    margin-top: 20px;
+
 }
 
 nav a {
@@ -42,7 +42,7 @@ nav a {
 }
 
 footer, .header-row {
-    background-color: lightsteelblue;
+    background-color: lightgray;
     border-radius: .5rem;
 }
 
@@ -66,4 +66,7 @@ input[type="text"], select {
     box-sizing: border-box;
     height: 22px;
     margin-bottom: 5px;
+}
+input[type="submit"]{
+    margin-left: 48%;
 }
