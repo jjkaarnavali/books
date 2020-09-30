@@ -25,6 +25,20 @@
     </thead>
     <tbody>
     <?php
+
+    $eesnimi = $_GET['firstName'];
+    $perenimi = $_GET['lastName'];
+    $hinne = $_GET['grade'];
+
+    $eesnimi = urlencode($eesnimi);
+    $perenimi = urlencode($perenimi);
+    $hinne = urlencode($hinne);
+    $data = $eesnimi . "," . $perenimi . "," . $hinne . PHP_EOL;
+    file_put_contents('authors.txt',
+        $data,
+        FILE_APPEND);
+
+
     $lines = file('authors.txt');
     foreach ($lines as $line) {
         $parts = explode(',', trim($line));

@@ -15,7 +15,7 @@
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
-<form class="contents-add" action="author-add.php">
+<form class="contents-add" action="author-list.php">
     <label for="eesnimi">Eesnimi: </label>
     <input type="text" id="eesnimi" name="firstName"><br>
     <label for="perenimi">Perekonnanimi: </label>
@@ -27,20 +27,6 @@
     <input type="radio" id="hinne4" name="grade" value="4">4
     <input type="radio" id="hinne5" name="grade" value="5">5
     <input type="submit" id="submitButton" name="submitButton" value="Lisa">
-    <?php
-    $eesnimi = $_GET['firstName'];
-    $perenimi = $_GET['lastName'];
-    $hinne = $_GET['grade'];
-    if ($eesnimi != "" && $perenimi != "" && $hinne != "") {
-        $eesnimi = urlencode($eesnimi);
-        $perenimi = urlencode($perenimi);
-        $hinne = urlencode($hinne);
-        $data = $eesnimi . "," . $perenimi . "," . $hinne . PHP_EOL;
-        file_put_contents('authors.txt',
-            $data,
-            FILE_APPEND);
-    }
-    ?>
 </form>
 <footer>ICD0007 Näidisrakendus</footer>
 </body>

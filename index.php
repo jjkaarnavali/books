@@ -25,6 +25,19 @@
     </thead>
     <tbody>
     <?php
+
+    $pealkiri = $_GET['title'];
+    $autor = $_GET['field2'];
+    $hinne = $_GET['grade'];
+    $pealkiri = urlencode($pealkiri);
+    $autor = urlencode($autor);
+    $hinne = urlencode($hinne);
+    $data = $pealkiri . "," . $autor . "," . $hinne . PHP_EOL;
+    file_put_contents('books.txt',
+        $data,
+        FILE_APPEND);
+
+
     $lines = file('books.txt');
     foreach ($lines as $line) {
         $parts = explode(',', trim($line));

@@ -15,11 +15,11 @@
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
-<form class="contents-add" action="book-add.php">
+<form class="contents-add" action="index.php">
     <label for="title">Pealkiri: </label>
-    <input type="text" id="title" name="title" required><br>
+    <input type="text" id="title" name="title"><br>
     <label for="A1">Autor 1: </label>
-    <select id="A1" required>
+    <select id="A1">
         <option></option>
         <option>Kivirähk</option>
         <option>Runnel</option>
@@ -35,26 +35,13 @@
     <label for="isRead">Loetud: </label>
     <input type="checkbox" id="isRead" name="isRead"> <br>
     <label for="hinne1">Hinne: </label>
-    <input type="radio" id="hinne1" name="grade" value="1" required>1
-    <input type="radio" id="hinne2" name="grade" value="2" required>2
-    <input type="radio" id="hinne3" name="grade" value="3" required>3
-    <input type="radio" id="hinne4" name="grade" value="4" required>4
-    <input type="radio" id="hinne5" name="grade" value="5" required>5 <br>
+    <input type="radio" id="hinne1" name="grade" value="1">1
+    <input type="radio" id="hinne2" name="grade" value="2">2
+    <input type="radio" id="hinne3" name="grade" value="3">3
+    <input type="radio" id="hinne4" name="grade" value="4">4
+    <input type="radio" id="hinne5" name="grade" value="5">5 <br>
     <input type="submit" id="submitButton" name="submitButton" value="Lisa">
-    <?php
-    $pealkiri = $_GET['title'];
-    $autor = $_GET['field2'];
-    $hinne = $_GET['grade'];
-    if ($pealkiri != "" && $hinne != "") {
-        $pealkiri = urlencode($pealkiri);
-        $autor = urlencode($autor);
-        $hinne = urlencode($hinne);
-        $data = $pealkiri . "," . $autor . "," . $hinne . PHP_EOL;
-        file_put_contents('books.txt',
-            $data,
-            FILE_APPEND);
-    }
-    ?>
+
 </form>
 <footer>ICD0007 Näidisrakendus</footer>
 </body>
