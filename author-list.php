@@ -1,7 +1,7 @@
 <?php
 require_once("functions.php");
-$firstname = $_POST["firstName"];
-$secondname = $_POST["lastName"];
+$firstname = $_POST["firstname"];
+$secondname = $_POST["lastname"];
 $grade = $_POST["grade"];
 addAuthor($firstname, $secondname, $grade);
 $posts = getAuthorsPosts();
@@ -25,6 +25,7 @@ $posts = getAuthorsPosts();
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
+
 <table class="contents-list">
     <thead>
     <tr>

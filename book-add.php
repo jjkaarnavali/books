@@ -15,9 +15,10 @@
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
+<div id="error-block">"Pealkiri peab sisaldama 3 kuni 23 märki!"<br></div>
 <form class="contents-add" action="index.php" method="post">
     <label for="title">Pealkiri: </label>
-    <input type="text" id="title" name="title"><br>
+    <input type="text" id="title" minlength="3" maxlength="23" name="title"><br>
 
     <label for="A1">Autor 1: </label>
     <select id="A1">
@@ -42,6 +43,7 @@
     <input type="radio" id="hinne4" name="grade" value="4">4
     <input type="radio" id="hinne5" name="grade" value="5">5 <br>
     <input type="submit" id="submitButton" name="submitButton" value="Lisa">
+
 
 </form>
 <footer>ICD0007 Näidisrakendus</footer>

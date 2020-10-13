@@ -3,6 +3,7 @@ require_once("functions.php");
 $title = $_POST["title"];
 $author = $_POST["author"];
 $grade = $_POST["grade"];
+
 addBook($title, $author, $grade);
 $posts = getBooksPosts();
 ?>
@@ -24,6 +25,8 @@ $posts = getBooksPosts();
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
+<div id="message-block">Uuendatud!</div>
+<div id="message-block">Lisatud!</div>
 <table class="contents-list">
     <thead>
     <tr>

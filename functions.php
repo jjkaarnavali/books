@@ -44,6 +44,7 @@ function getAuthorByFirstname($firstname){
 }
 
 function addBook($title, $author, $grade){
+
     $line = urlencode($title) . "," . urlencode($author) . "," . urlencode($grade) . PHP_EOL;
     file_put_contents(BOOKS_DATA_FILE, $line, FILE_APPEND);
 }
@@ -74,6 +75,7 @@ function deleteAuthorByFirstname($firstname){
         }
     }
     file_put_contents(AUTHORS_DATA_FILE, $data);
+
 }
 function editBook($originalTitle, $title, $author, $grade){
     $posts = getBooksPosts();

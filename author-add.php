@@ -1,3 +1,46 @@
+<?php
+require_once("functions.php");
+
+
+$messageFirst = "";
+$messageSecond = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST"){
+    $input = isset($_POST["firstname"])
+        ? $_POST["firstname"]
+        : "";
+    $inputSecondname = isset($_POST["secondname"])
+        ? $_POST["secondname"]
+        : "";
+    $inputgrade = isset($_POST["grade"])
+        ? $_POST["grade"]
+        : 0;
+    if (strlen($input) < 1 || strlen($input) > 21){
+        if (strlen($inputSecondname) < 1 || strlen($inputSecondname) > 22){
+
+            $messageSecond = "Perenimi peab sisaldama 2 kuni 22 märki!";
+        }
+        $messageFirst = "Eesnimi peab sisaldama 1 kuni 21 märki!";
+
+    }elseif (strlen($inputSecondname) < 1 || strlen($inputSecondname) > 22){
+
+        $messageSecond = "Perenimi peab sisaldama 2 kuni 22 märki!";
+
+    }else{
+        $firstname = $_POST["firstname"];
+        $secondname = $_POST["secondname"];
+        $grade = $_POST["grade"];
+        addAuthor($firstname, $secondname, $grade);
+        header("Location: author-list.php");
+
+    }
+
+
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="et">
 <head>
@@ -15,19 +58,66 @@
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
-<form class="contents-add" action="author-list.php" method="post">
+<?php if($messageFirst !== ""): ?>
+    <div id="error-block"><?= $messageFirst?><br></div>
+<?php endif; ?>
+<?php if($messageSecond !== ""): ?>
+    <div id="error-block"><?= $messageSecond?><br></div>
+<?php endif; ?>
+<form class="contents-add" action="author-add.php" method="post">
     <label for="eesnimi">Eesnimi: </label>
-    <input type="text" id="eesnimi" name="firstName"><br>
+    <?php if($messageFirst === "" && $messageSecond === ""): ?>
+        <input type="text" id="eesnimi" name="firstname"><br>
+
+    <?php else: ?>
+        <input type="text" id="eesnimi" name="firstname" value="<?= $input?>"><br>
+    <?php endif; ?>
+
     <label for="perenimi">Perekonnanimi: </label>
-    <input type="text" id="perenimi" name="lastName"><br>
+    <?php if($messageFirst === "" && $messageSecond === ""): ?>
+        <input type="text" id="perenimi" name="secondname"><br>
+    <?php else: ?>
+        <input type="text" id="perenimi" name="secondname" value="<?= $inputSecondname?>"><br>
+    <?php endif; ?>
+
     <label for="hinne1">Hinne: </label>
-    <input type="radio" id="hinne1" name="grade" value="1">1
-    <input type="radio" id="hinne2" name="grade" value="2">2
-    <input type="radio" id="hinne3" name="grade" value="3">3
-    <input type="radio" id="hinne4" name="grade" value="4">4
-    <input type="radio" id="hinne5" name="grade" value="5">5
-    <input type="submit" id="submitButton" name="submitButton" value="Lisa">
+    <input type="radio" id="hinne1" name="grade" value="1"
+        <?php
+        if ($inputgrade == 1): ?>
+            checked="checked"
+        <?php endif; ?>
+    >1
+    <input type="radio" id="hinne2" name="grade" value="2"
+
+        <?php
+        if ($inputgrade == 2): ?>
+            checked="checked"
+        <?php endif; ?>
+    >2
+    <input type="radio" id="hinne3" name="grade" value="3"
+        <?php
+        if ($inputgrade == 3): ?>
+            checked="checked"
+        <?php endif; ?>
+    >3
+    <input type="radio" id="hinne4" name="grade" value="4"
+        <?php
+        if ($inputgrade == 4): ?>
+            checked="checked"
+        <?php endif; ?>
+    >4
+    <input type="radio" id="hinne5" name="grade" value="5"
+        <?php
+        if ($inputgrade == 5): ?>
+            checked="checked"
+        <?php endif; ?>
+    >5 <br>
+
+
+    <input type="submit" id="submitButton" name="submitButton" value="Salvesta">
 </form>
+
+
 <footer>ICD0007 Näidisrakendus</footer>
 </body>
 </html>

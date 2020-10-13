@@ -1,17 +1,39 @@
 <?php
 require_once("functions.php");
 
-$post = [];
+
+$message = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $originalTitle = $_POST["original-title"];
-    $title = $_POST["title"];
-    $author = $_POST["author"];
-    $grade = $_POST["grade"];
-    editBook($originalTitle, $title, $author, $grade);
-    header("Location: index.php");
+    $input = isset($_POST["title"])
+        ? $_POST["title"]
+        : "";
+    $inputgrade = isset($_POST["grade"])
+        ? $_POST["grade"]
+        : 0;
+    if (!empty($input) && strlen($input) < 3 || strlen($input) > 23){
+
+        $badtitle = $input;
+        $message = "Pealkiri peab sisaldama 3 kuni 23 märki!";
+
+    }elseif (!empty($input)){
+        $originalTitle = $_POST["original-title"];
+        $title = $_POST["title"];
+        $author = $_POST["author"];
+        $grade = $_POST["grade"];
+        editBook($originalTitle, $title, $author, $grade);
+        header("Location: index.php");
+    }else{
+
+        $message = "Pealkiri peab sisaldama 3 kuni 23 märki!";
+
+    }
+
+
 }else{
     $title = $_GET["title"];
     $post = getBookByTitle($title);
+
 }
 
 ?>
@@ -34,9 +56,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
+<?php if($message !== ""): ?>
+    <div id="error-block"><?= $message?><br></div>
+<?php endif; ?>
 <form class="contents-add" action="edit-book.php" method="post">
     <label for="title">Pealkiri: </label>
-    <input type="text" id="title" name="title" value="<?= $post["title"]?>"><br>
+    <?php if($message !== ""): ?>
+        <input type="text" id="title" name="title" value="<?= $input?>"><br>
+    <?php else: ?>
+        <input type="text" id="title" name="title" value="<?= $post["title"]?>"><br>
+    <?php endif; ?>
+
 
     <label for="A1">Autor 1: </label>
     <select id="A1">
@@ -59,17 +89,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         <?php
     if ($post["grade"] == 1): ?>
         checked="checked"
+    <?php
+    elseif ($inputgrade == 1): ?>
+            checked="checked"
     <?php endif; ?>
     >1
     <input type="radio" id="hinne2" name="grade" value="2"
         <?php
-    if ($post["grade"] == 2): ?>
-        checked="checked"
-    <?php endif; ?>
+        if ($post["grade"] == 2): ?>
+            checked="checked"
+        <?php
+        elseif ($inputgrade == 2): ?>
+            checked="checked"
+        <?php endif; ?>
     >2
     <input type="radio" id="hinne3" name="grade" value="3"
         <?php
         if ($post["grade"] == 3): ?>
+            checked="checked"
+        <?php
+        elseif ($inputgrade == 3): ?>
             checked="checked"
         <?php endif; ?>
     >3
@@ -77,23 +116,32 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         <?php
         if ($post["grade"] == 4): ?>
             checked="checked"
+        <?php
+        elseif ($inputgrade == 4): ?>
+            checked="checked"
         <?php endif; ?>
     >4
     <input type="radio" id="hinne5" name="grade" value="5"
         <?php
         if ($post["grade"] == 5): ?>
             checked="checked"
+        <?php
+        elseif ($inputgrade == 5): ?>
+            checked="checked"
         <?php endif; ?>
     >5 <br>
-    <input type="hidden" name="original-title" value="<?= $post["title"]?>">
+    <?php if($message !== ""): ?>
+        <input type="hidden" name="original-title" value="<?= $originalTitle?>">
+    <?php else: ?>
+        <input type="hidden" name="original-title" value="<?= $post["title"]?>">
+    <?php endif; ?>
     <input type="submit" id="submitButton" name="submitButton" value="Salvesta"/>
 
 </form>
 <form action="delete-book.php" method="post">
     <input type="hidden" name="post-to-delete" value="<?= $post["title"]?>"/>
-    <input type="submit" value="Kustuta"/>
+    <input type="submit" name="deleteButton" value="Kustuta"/>
 </form>
 <footer>ICD0007 Näidisrakendus</footer>
 </body>
 </html>
-
