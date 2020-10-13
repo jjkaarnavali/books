@@ -15,7 +15,7 @@
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
-<form class="contents-add" action="author-list.php">
+<form class="contents-add" action="author-list.php" method="post">
     <label for="eesnimi">Eesnimi: </label>
     <input type="text" id="eesnimi" name="firstName"><br>
     <label for="perenimi">Perekonnanimi: </label>

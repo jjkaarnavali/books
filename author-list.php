@@ -1,3 +1,13 @@
+<?php
+require_once("functions.php");
+$firstname = $_POST["firstName"];
+$secondname = $_POST["lastName"];
+$grade = $_POST["grade"];
+addAuthor($firstname, $secondname, $grade);
+$posts = getAuthorsPosts();
+?>
+
+
 <!DOCTYPE html>
 <html lang="et">
 <head>
@@ -24,35 +34,14 @@
     </tr>
     </thead>
     <tbody>
-    <?php
 
-    $eesnimi = $_GET['firstName'];
-    $perenimi = $_GET['lastName'];
-    $hinne = $_GET['grade'];
-
-    $eesnimi = urlencode($eesnimi);
-    $perenimi = urlencode($perenimi);
-    $hinne = urlencode($hinne);
-    $data = $eesnimi . "," . $perenimi . "," . $hinne . PHP_EOL;
-    file_put_contents('authors.txt',
-        $data,
-        FILE_APPEND);
-
-
-    $lines = file('authors.txt');
-    foreach ($lines as $line) {
-        $parts = explode(',', trim($line));
-        list($eesnimi, $perenimi, $hinne) = $parts;
-        $eesnimi = urldecode($eesnimi);
-        $perenimi = urldecode($perenimi);
-        $hinne = urldecode($hinne);
-        print '<tr>';
-        print '<td>' . $eesnimi . '</td>';
-        print '<td>' . $perenimi . '</td>';
-        print '<td>' . $hinne . '</td>';
-        print '</tr>';
-    }
-    ?>
+    <?php foreach ($posts as $post): ?>
+    <tr>
+        <td><a href="edit-author.php?firstname=<?=$post["firstname"]?>"> <?=$post["firstname"]?></td>
+        <td><?=$post["secondname"]?></td>
+        <td><?=$post["grade"]?></td>
+    </tr>
+    <?php endforeach; ?>
     </tbody>
 </table>
 <footer>ICD0007 Näidisrakendus</footer>

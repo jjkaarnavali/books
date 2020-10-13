@@ -1,3 +1,12 @@
+<?php
+require_once("functions.php");
+$title = $_POST["title"];
+$author = $_POST["author"];
+$grade = $_POST["grade"];
+addBook($title, $author, $grade);
+$posts = getBooksPosts();
+?>
+
 <!DOCTYPE html>
 <html lang="et">
 <head>
@@ -24,34 +33,14 @@
     </tr>
     </thead>
     <tbody>
-    <?php
 
-    $pealkiri = $_GET['title'];
-    $autor = $_GET['field2'];
-    $hinne = $_GET['grade'];
-    $pealkiri = urlencode($pealkiri);
-    $autor = urlencode($autor);
-    $hinne = urlencode($hinne);
-    $data = $pealkiri . "," . $autor . "," . $hinne . PHP_EOL;
-    file_put_contents('books.txt',
-        $data,
-        FILE_APPEND);
-
-
-    $lines = file('books.txt');
-    foreach ($lines as $line) {
-        $parts = explode(',', trim($line));
-        list($pealkiri, $autor, $hinne) = $parts;
-        $pealkiri = urldecode($pealkiri);
-        $autor = urldecode($autor);
-        $hinne = urldecode($hinne);
-        print '<tr>';
-        print '<td>' . $pealkiri . '</td>';
-        print '<td>' . $autor . '</td>';
-        print '<td>' . $hinne . '</td>';
-        print '</tr>';
-    }
-    ?>
+    <?php foreach ($posts as $post): ?>
+        <tr>
+            <td><a href="edit-book.php?title=<?=$post["title"]?>"><?=$post["title"]?></a></td>
+            <td><?=$post["author"]?></td>
+            <td><?=$post["grade"]?></td>
+        </tr>
+    <?php endforeach; ?>
     </tbody>
 </table>
 <footer>ICD0007 Näidisrakendus</footer>

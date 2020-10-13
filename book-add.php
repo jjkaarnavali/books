@@ -15,9 +15,10 @@
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
-<form class="contents-add" action="index.php">
+<form class="contents-add" action="index.php" method="post">
     <label for="title">Pealkiri: </label>
     <input type="text" id="title" name="title"><br>
+
     <label for="A1">Autor 1: </label>
     <select id="A1">
         <option></option>
