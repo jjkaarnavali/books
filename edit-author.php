@@ -28,8 +28,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
     }else{
         $originalFirstName = $_POST["original-firstname"];
-        $firstName = $_POST["firstName"];
-        $lastName = $_POST["lastName"];
+        $firstName = trim($_POST["firstName"]);
+        $lastName = trim($_POST["lastName"]);
         $grade = $_POST["grade"];
         editAuthor($originalFirstName, $firstName, $lastName, $grade);
         header("Location: author-list.php?message=changed");
@@ -38,6 +38,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
 }else{
     $firstName = $_GET["firstName"];
+    $originalFirstname = $firstName;
     $post = getAuthorByFirstname($firstName);
 
 }
@@ -69,17 +70,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 <?php endif; ?>
 <form class="contents-add" action="edit-author.php" method="post">
     <label for="eesnimi">Eesnimi: </label>
-    <?php if($messageFirst === "" && $messageSecond === ""): ?>
-        <input type="text" id="eesnimi" name="firstName" value="<?=$post["firstName"]?>"><br>
-    <?php else: ?>
+    <?php if($messageFirst !== "" || $messageSecond !== ""): ?>
         <input type="text" id="eesnimi" name="firstName" value="<?=$input?>"><br>
+    <?php else: ?>
+        <input type="text" id="eesnimi" name="firstName" value="<?=$post["firstName"]?>"><br>
     <?php endif; ?>
 
     <label for="perenimi">Perekonnanimi: </label>
-    <?php if($messageFirst === "" && $messageSecond === ""): ?>
+    <?php if($messageFirst !== "" || $messageSecond !== ""): ?>
+        <input type="text" id="perenimi" name="lastName" value="<?=$inputLastName?>"><br>
         <input type="text" id="perenimi" name="lastName" value="<?=$post["lastName"]?>"><br>
     <?php else: ?>
-        <input type="text" id="perenimi" name="lastName" value="<?=$inputLastName?>"><br>
+        <input type="text" id="perenimi" name="lastName" value="<?=$post["lastName"]?>"><br>
     <?php endif; ?>
 
     <label for="hinne1">Hinne: </label>
@@ -128,19 +130,22 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
             checked="checked"
         <?php endif; ?>
     >5 <br>
-    <?php if($messageFirst === "" && $messageSecond === ""): ?>
-        <input type="hidden" name="original-firstname" value="<?= $post["firstName"]?>">
+    <?php if($messageFirst !== "" || $messageSecond !== ""): ?>
+        <input type="hidden" name="original-firstname" value="<?=$originalFirstname?>">
+
     <?php else: ?>
-        <input type="hidden" name="original-firstname" value="<?= $originalFirstname?>">
+        <input type="hidden" name="original-firstname" value="<?=$post["firstName"]?>">
+
     <?php endif; ?>
 
     <input type="submit" id="submitButton" name="submitButton" value="Salvesta">
+
 </form>
 <form action="delete-author.php" method="post">
     <?php if($messageFirst === "" && $messageSecond === ""): ?>
         <input type="hidden" name="post-to-delete" value="<?= $post["firstName"]?>"/>
     <?php else: ?>
-        <input type="hidden" name="post-to-delete" value="<?= $originalFirstname?>"/>
+        <input type="hidden" name="post-to-delete" value="<?=$originalFirstname?>"/>
     <?php endif; ?>
     <input type="submit" name="deleteButton" value="Kustuta"/>
 </form>

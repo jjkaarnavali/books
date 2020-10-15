@@ -25,10 +25,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
     }else{
 
-        $title = $_POST["title"];
-        $author = $_POST["author"];
+        $title = trim($_POST["title"]);
+        $author = trim($_POST["author"]);
         $grade = $_POST["grade"];
+
         addBook($title, $author, $grade);
+
         header("Location: index.php?message=success");
 
 

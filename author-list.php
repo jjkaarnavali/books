@@ -1,8 +1,5 @@
 <?php
 require_once("functions.php");
-
-$posts = getAuthorsPosts();
-
 $message = "";
 
 $success = $_GET["message"];
@@ -12,8 +9,8 @@ if ($success == "changed")
     $message = "Muudetud!";
 if ($success == "deleted")
     $message = "Kustutatud!";
+$posts = getAuthorsPosts();
 ?>
-
 
 <!DOCTYPE html>
 <html lang="et">
@@ -46,11 +43,11 @@ if ($success == "deleted")
     <tbody>
 
     <?php foreach ($posts as $post): ?>
-    <tr>
-        <td><a href="edit-author.php?firstName=<?=$post["firstName"]?>"><?=$post["firstName"]?></td>
-        <td><?=$post["lastName"]?></td>
-        <td><?=$post["grade"]?></td>
-    </tr>
+        <tr>
+            <td><a href="edit-author.php?firstName=<?=$post["firstName"]?>"><?=$post["firstName"]?></td>
+            <td><?=$post["lastName"]?></td>
+            <td><?=$post["grade"]?></td>
+        </tr>
     <?php endforeach; ?>
     </tbody>
 </table>

@@ -27,7 +27,7 @@ function getAuthorsPosts(){
 function getBookByTitle($title){
     $posts = getBooksPosts();
     foreach ($posts as $post){
-        if ($post["title"] === $title){
+        if ($post["title"] == $title){
             return $post;
         }
     }
@@ -36,7 +36,7 @@ function getBookByTitle($title){
 function getAuthorByFirstname($firstName){
     $posts = getAuthorsPosts();
     foreach ($posts as $post){
-        if ($post["firstName"] === $firstName){
+        if ($post["firstName"] == $firstName){
             return $post;
         }
     }
@@ -49,7 +49,8 @@ function addBook($title, $author, $grade){
     file_put_contents(BOOKS_DATA_FILE, $line, FILE_APPEND);
 }
 function addAuthor($firstName, $lastName, $grade){
-    $line = urlencode($firstName) . "," . urlencode($lastName) . "," . urlencode($grade) . PHP_EOL;
+
+    $line = urlencode(trim($firstName)) . "," . urlencode(trim($lastName)) . "," . urlencode(trim($grade)) . PHP_EOL;
     file_put_contents(AUTHORS_DATA_FILE, $line, FILE_APPEND);
 }
 function deleteBookByTitle($title){

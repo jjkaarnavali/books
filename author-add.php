@@ -18,19 +18,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         : 0;
 
     if (strlen($input) < 1 || strlen($input) > 21){
-        if (strlen($inputLastName) < 2 || strlen($inputLastName) > 22){
 
-            $messageSecond = "Perenimi peab sisaldama 2 kuni 22 märki!";
-        }
         $messageFirst = "Eesnimi peab sisaldama 1 kuni 21 märki!";
 
-    }elseif (strlen($inputLastName) < 2 || strlen($inputLastName) > 22){
+    }
+    if (strlen($inputLastName) < 2 || strlen($inputLastName) > 22){
 
         $messageSecond = "Perenimi peab sisaldama 2 kuni 22 märki!";
 
-    }else{
-        $firstName = $_POST["firstName"];
-        $lastName = $_POST["lastName"];
+    }
+    if (strlen($input) >= 1 && strlen($input) <= 21 && strlen($inputLastName) >= 2 && strlen($inputLastName) <= 22){
+        $firstName = trim($_POST["firstName"]);
+        $lastName = trim($_POST["lastName"]);
         $grade = $_POST["grade"];
 
         addAuthor($firstName, $lastName, $grade);

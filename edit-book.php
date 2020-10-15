@@ -21,8 +21,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
     }else{
         $originalTitle = $_POST["original-title"];
-        $title = $_POST["title"];
-        $author = $_POST["author"];
+        $title = trim($_POST["title"]);
+        $author = trim($_POST["author"]);
         $grade = $_POST["grade"];
         editBook($originalTitle, $title, $author, $grade);
         header("Location: index.php?message=changed");
@@ -31,6 +31,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
 }else{
     $title = $_GET["title"];
+    $originalTitle = $title;
     $post = getBookByTitle($title);
 
 }
@@ -139,9 +140,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     >5 <br>
     <?php if($message !== ""): ?>
         <input type="hidden" name="original-title" value="<?= $originalTitle?>">
+
     <?php else: ?>
         <input type="hidden" name="original-title" value="<?= $post["title"]?>">
+
     <?php endif; ?>
+
     <input type="submit" id="submitButton" name="submitButton" value="Salvesta"/>
 
 </form>

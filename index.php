@@ -1,7 +1,5 @@
 <?php
 require_once("functions.php");
-
-$posts = getBooksPosts();
 $message = "";
 
 $success = $_GET["message"];
@@ -11,6 +9,7 @@ if ($success == "changed")
     $message = "Muudetud!";
 if ($success == "deleted")
     $message = "Kustutatud!";
+$posts = getBooksPosts();
 ?>
 
 <!DOCTYPE html>
