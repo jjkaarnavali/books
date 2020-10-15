@@ -44,7 +44,7 @@ $posts = getAuthorsPosts();
 
     <?php foreach ($posts as $post): ?>
         <tr>
-            <td><a href="edit-author.php?firstName=<?=$post["firstName"]?>"><?=$post["firstName"]?></td>
+            <td><a href="edit-author.php?firstName=<?=$post["firstName"]?>"><?=$post["firstName"]?></a></td>
             <td><?=$post["lastName"]?></td>
             <td><?=$post["grade"]?></td>
         </tr>
