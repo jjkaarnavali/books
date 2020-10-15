@@ -18,8 +18,8 @@ function getAuthorsPosts(){
     $lines = file(AUTHORS_DATA_FILE);
     $posts = [];
     foreach ($lines as $line){
-        list($firstname, $secondname, $grade) = explode(",", $line);
-        $posts[] = ["firstname" =>urldecode($firstname), "secondname" =>urldecode($secondname),
+        list($firstName, $lastName, $grade) = explode(",", $line);
+        $posts[] = ["firstName" =>urldecode($firstName), "lastName" =>urldecode($lastName),
             "grade" =>urldecode($grade)];
     }
     return $posts;
@@ -33,10 +33,10 @@ function getBookByTitle($title){
     }
     return null;
 }
-function getAuthorByFirstname($firstname){
+function getAuthorByFirstname($firstName){
     $posts = getAuthorsPosts();
     foreach ($posts as $post){
-        if ($post["firstname"] === $firstname){
+        if ($post["firstName"] === $firstName){
             return $post;
         }
     }
@@ -48,8 +48,8 @@ function addBook($title, $author, $grade){
     $line = urlencode($title) . "," . urlencode($author) . "," . urlencode($grade) . PHP_EOL;
     file_put_contents(BOOKS_DATA_FILE, $line, FILE_APPEND);
 }
-function addAuthor($firstname, $secondname, $grade){
-    $line = urlencode($firstname) . "," . urlencode($secondname) . "," . urlencode($grade) . PHP_EOL;
+function addAuthor($firstName, $lastName, $grade){
+    $line = urlencode($firstName) . "," . urlencode($lastName) . "," . urlencode($grade) . PHP_EOL;
     file_put_contents(AUTHORS_DATA_FILE, $line, FILE_APPEND);
 }
 function deleteBookByTitle($title){
@@ -64,13 +64,13 @@ function deleteBookByTitle($title){
     }
     file_put_contents(BOOKS_DATA_FILE, $data);
 }
-function deleteAuthorByFirstname($firstname){
+function deleteAuthorByFirstname($firstName){
     $posts = getAuthorsPosts();
     $data = "";
 
     foreach ($posts as $post){
-        if ($post["firstname"] !== $firstname){
-            $data = $data .  urlencode($post["firstname"]) . "," . urlencode($post["secondname"])
+        if ($post["firstName"] !== $firstName){
+            $data = $data .  urlencode($post["firstName"]) . "," . urlencode($post["lastName"])
                 . "," . urlencode($post["grade"]) . PHP_EOL;
         }
     }
@@ -93,17 +93,17 @@ function editBook($originalTitle, $title, $author, $grade){
     file_put_contents(BOOKS_DATA_FILE, $data);
 
 }
-function editAuthor($originalFirstname, $firstname, $secondname, $grade){
+function editAuthor($originalFirstName, $firstName, $lastName, $grade){
     $posts = getAuthorsPosts();
     $data = "";
     foreach ($posts as $post){
-        if ($post["firstname"] === $originalFirstname){
-            $post["firstname"] = $firstname;
-            $post["secondname"] = $secondname;
+        if ($post["firstName"] === $originalFirstName){
+            $post["firstName"] = $firstName;
+            $post["lastName"] = $lastName;
             $post["grade"] = $grade;
         }
 
-        $data = $data .  urlencode($post["firstname"]) . "," . urlencode($post["secondname"])
+        $data = $data .  urlencode($post["firstName"]) . "," . urlencode($post["lastName"])
             . "," . urlencode($post["grade"]) . PHP_EOL;
 
     }

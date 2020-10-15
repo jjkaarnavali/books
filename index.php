@@ -1,11 +1,16 @@
 <?php
 require_once("functions.php");
-$title = $_POST["title"];
-$author = $_POST["author"];
-$grade = $_POST["grade"];
 
-addBook($title, $author, $grade);
 $posts = getBooksPosts();
+$message = "";
+
+$success = $_GET["message"];
+if ($success == "success")
+    $message = "Lisatud!";
+if ($success == "changed")
+    $message = "Muudetud!";
+if ($success == "deleted")
+    $message = "Kustutatud!";
 ?>
 
 <!DOCTYPE html>
@@ -25,8 +30,9 @@ $posts = getBooksPosts();
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
-<div id="message-block">Uuendatud!</div>
-<div id="message-block">Lisatud!</div>
+<?php if($message !== ""): ?>
+    <div id="message-block"><?= $message?><br></div>
+<?php endif; ?>
 <table class="contents-list">
     <thead>
     <tr>

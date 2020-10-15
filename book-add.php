@@ -1,3 +1,45 @@
+<?php
+require_once("functions.php");
+
+
+$message = "";
+
+if ($_SERVER["REQUEST_METHOD"] === "POST"){
+
+    $input = isset($_POST["title"])
+        ? $_POST["title"]
+        : "";
+    $inputAuthor = isset($_POST["author"])
+        ? $_POST["author"]
+        : "";
+    $inputread = isset($_POST["isRead"])
+        ? $_POST["isRead"]
+        : false;
+    $inputgrade = isset($_POST["grade"])
+        ? $_POST["grade"]
+        : 0;
+
+    if (strlen($input) < 3 || strlen($input) > 23){
+
+        $message = "Pealkiri peab sisaldama 3 kuni 23 märki!";
+
+    }else{
+
+        $title = $_POST["title"];
+        $author = $_POST["author"];
+        $grade = $_POST["grade"];
+        addBook($title, $author, $grade);
+        header("Location: index.php?message=success");
+
+
+    }
+
+
+}
+
+
+?>
+
 <!DOCTYPE html>
 <html lang="et">
 <head>
@@ -15,10 +57,16 @@
     <span> | </span>
     <a id="author-form-link" href="author-add.php">Lisa autor</a>
 </nav>
-<div id="error-block">"Pealkiri peab sisaldama 3 kuni 23 märki!"<br></div>
-<form class="contents-add" action="index.php" method="post">
+<?php if($message !== ""): ?>
+    <div id="error-block"><?= $message?><br></div>
+<?php endif; ?>
+<form class="contents-add" action="book-add.php" method="post">
     <label for="title">Pealkiri: </label>
-    <input type="text" id="title" minlength="3" maxlength="23" name="title"><br>
+    <?php if($message !== ""): ?>
+        <input type="text" id="title" name="title" value="<?= $input?>"><br>
+    <?php else: ?>
+        <input type="text" id="title" name="title" ><br>
+    <?php endif; ?>
 
     <label for="A1">Autor 1: </label>
     <select id="A1">
@@ -35,13 +83,43 @@
         <option>Tolkien</option>
     </select><br>
     <label for="isRead">Loetud: </label>
-    <input type="checkbox" id="isRead" name="isRead"> <br>
+    <input type="checkbox" id="isRead" name="isRead"
+        <?php
+        if ($inputread == true): ?>
+            checked="checked"
+        <?php endif; ?>
+    > <br>
     <label for="hinne1">Hinne: </label>
-    <input type="radio" id="hinne1" name="grade" value="1">1
-    <input type="radio" id="hinne2" name="grade" value="2">2
-    <input type="radio" id="hinne3" name="grade" value="3">3
-    <input type="radio" id="hinne4" name="grade" value="4">4
-    <input type="radio" id="hinne5" name="grade" value="5">5 <br>
+    <input type="radio" id="hinne1" name="grade" value="1"
+        <?php
+        if ($inputgrade == 1): ?>
+            checked="checked"
+        <?php endif; ?>
+    >1
+    <input type="radio" id="hinne2" name="grade" value="2"
+        <?php
+        if ($inputgrade == 2): ?>
+            checked="checked"
+        <?php endif; ?>
+    >2
+    <input type="radio" id="hinne3" name="grade" value="3"
+        <?php
+        if ($inputgrade == 3): ?>
+            checked="checked"
+        <?php endif; ?>
+    >3
+    <input type="radio" id="hinne4" name="grade" value="4"
+        <?php
+        if ($inputgrade == 4): ?>
+            checked="checked"
+        <?php endif; ?>
+    >4
+    <input type="radio" id="hinne5" name="grade" value="5"
+        <?php
+        if ($inputgrade == 5): ?>
+            checked="checked"
+        <?php endif; ?>
+    >5 <br>
     <input type="submit" id="submitButton" name="submitButton" value="Lisa">
 
 

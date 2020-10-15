@@ -6,32 +6,37 @@ $messageFirst = "";
 $messageSecond = "";
 
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
-    $input = isset($_POST["firstname"])
-        ? $_POST["firstname"]
+
+    $input = isset($_POST["firstName"])
+        ? $_POST["firstName"]
         : "";
-    $inputSecondname = isset($_POST["secondname"])
-        ? $_POST["secondname"]
+    $inputLastName = isset($_POST["lastName"])
+        ? $_POST["lastName"]
         : "";
     $inputgrade = isset($_POST["grade"])
         ? $_POST["grade"]
         : 0;
+
     if (strlen($input) < 1 || strlen($input) > 21){
-        if (strlen($inputSecondname) < 1 || strlen($inputSecondname) > 22){
+        if (strlen($inputLastName) < 2 || strlen($inputLastName) > 22){
 
             $messageSecond = "Perenimi peab sisaldama 2 kuni 22 märki!";
         }
         $messageFirst = "Eesnimi peab sisaldama 1 kuni 21 märki!";
 
-    }elseif (strlen($inputSecondname) < 1 || strlen($inputSecondname) > 22){
+    }elseif (strlen($inputLastName) < 2 || strlen($inputLastName) > 22){
 
         $messageSecond = "Perenimi peab sisaldama 2 kuni 22 märki!";
 
     }else{
-        $firstname = $_POST["firstname"];
-        $secondname = $_POST["secondname"];
+        $firstName = $_POST["firstName"];
+        $lastName = $_POST["lastName"];
         $grade = $_POST["grade"];
-        addAuthor($firstname, $secondname, $grade);
-        header("Location: author-list.php");
+
+        addAuthor($firstName, $lastName, $grade);
+
+        header("Location: author-list.php?message=success");
+
 
     }
 
@@ -67,17 +72,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 <form class="contents-add" action="author-add.php" method="post">
     <label for="eesnimi">Eesnimi: </label>
     <?php if($messageFirst === "" && $messageSecond === ""): ?>
-        <input type="text" id="eesnimi" name="firstname"><br>
+        <input type="text" id="eesnimi" name="firstName"><br>
 
     <?php else: ?>
-        <input type="text" id="eesnimi" name="firstname" value="<?= $input?>"><br>
+        <input type="text" id="eesnimi" name="firstName" value="<?= $input?>"><br>
     <?php endif; ?>
 
     <label for="perenimi">Perekonnanimi: </label>
     <?php if($messageFirst === "" && $messageSecond === ""): ?>
-        <input type="text" id="perenimi" name="secondname"><br>
+        <input type="text" id="perenimi" name="lastName"><br>
     <?php else: ?>
-        <input type="text" id="perenimi" name="secondname" value="<?= $inputSecondname?>"><br>
+        <input type="text" id="perenimi" name="lastName" value="<?= $inputLastName?>"><br>
     <?php endif; ?>
 
     <label for="hinne1">Hinne: </label>

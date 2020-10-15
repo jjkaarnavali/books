@@ -8,25 +8,24 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $input = isset($_POST["title"])
         ? $_POST["title"]
         : "";
+    $inputread = isset($_POST["isRead"])
+        ? $_POST["isRead"]
+        : false;
     $inputgrade = isset($_POST["grade"])
         ? $_POST["grade"]
         : 0;
-    if (!empty($input) && strlen($input) < 3 || strlen($input) > 23){
+    if (strlen($input) < 3 || strlen($input) > 23){
 
-        $badtitle = $input;
+
         $message = "Pealkiri peab sisaldama 3 kuni 23 märki!";
 
-    }elseif (!empty($input)){
+    }else{
         $originalTitle = $_POST["original-title"];
         $title = $_POST["title"];
         $author = $_POST["author"];
         $grade = $_POST["grade"];
         editBook($originalTitle, $title, $author, $grade);
-        header("Location: index.php");
-    }else{
-
-        $message = "Pealkiri peab sisaldama 3 kuni 23 märki!";
-
+        header("Location: index.php?message=changed");
     }
 
 
@@ -83,7 +82,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         <option>Tolkien</option>
     </select><br>
     <label for="isRead">Loetud: </label>
-    <input type="checkbox" id="isRead" name="isRead"> <br>
+    <input type="checkbox" id="isRead" name="isRead"
+        <?php
+        if ($post["isRead"] == true): ?>
+            checked="checked"
+        <?php
+        elseif ($inputread == true): ?>
+            checked="checked"
+        <?php endif; ?>
+    > <br>
     <label for="hinne1">Hinne: </label>
     <input type="radio" id="hinne1" name="grade" value="1"
         <?php
@@ -139,7 +146,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
 </form>
 <form action="delete-book.php" method="post">
-    <input type="hidden" name="post-to-delete" value="<?= $post["title"]?>"/>
+    <?php if($message === ""): ?>
+        <input type="hidden" name="post-to-delete" value="<?= $post["title"]?>"/>
+    <?php else: ?>
+        <input type="hidden" name="post-to-delete" value="<?= $originalTitle?>"/>
+    <?php endif; ?>
     <input type="submit" name="deleteButton" value="Kustuta"/>
 </form>
 <footer>ICD0007 Näidisrakendus</footer>

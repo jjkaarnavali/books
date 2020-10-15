@@ -5,40 +5,40 @@ require_once("functions.php");
 $messageFirst = "";
 $messageSecond = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
-    $originalFirstname = $_POST["original-firstname"];
-    $input = isset($_POST["firstname"])
-        ? $_POST["firstname"]
+    $originalFirstName = $_POST["original-firstname"];
+    $input = isset($_POST["firstName"])
+        ? $_POST["firstName"]
         : "";
-    $inputSecondname = isset($_POST["secondname"])
-        ? $_POST["secondname"]
+    $inputLastName = isset($_POST["lastName"])
+        ? $_POST["lastName"]
         : "";
     $inputgrade = isset($_POST["grade"])
         ? $_POST["grade"]
         : 0;
     if (strlen($input) < 1 || strlen($input) > 21){
-        if (strlen($inputSecondname) < 1 || strlen($inputSecondname) > 22){
+        if (strlen($inputLastName) < 1 || strlen($inputLastName) > 22){
 
         $messageSecond = "Perenimi peab sisaldama 2 kuni 22 märki!";
         }
         $messageFirst = "Eesnimi peab sisaldama 1 kuni 21 märki!";
 
-    }elseif (strlen($inputSecondname) < 1 || strlen($inputSecondname) > 22){
+    }elseif (strlen($inputLastName) < 1 || strlen($inputLastName) > 22){
 
         $messageSecond = "Perenimi peab sisaldama 2 kuni 22 märki!";
 
     }else{
-        $originalTitle = $_POST["original-firstname"];
-        $firstname = $_POST["firstname"];
-        $secondname = $_POST["secondname"];
+        $originalFirstName = $_POST["original-firstname"];
+        $firstName = $_POST["firstName"];
+        $lastName = $_POST["lastName"];
         $grade = $_POST["grade"];
-        editAuthor($originalFirstname, $firstname, $secondname, $grade);
-        header("Location: author-list.php");
+        editAuthor($originalFirstName, $firstName, $lastName, $grade);
+        header("Location: author-list.php?message=changed");
     }
 
 
 }else{
-    $firstname = $_GET["firstname"];
-    $post = getAuthorByFirstname($firstname);
+    $firstName = $_GET["firstName"];
+    $post = getAuthorByFirstname($firstName);
 
 }
 
@@ -70,16 +70,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 <form class="contents-add" action="edit-author.php" method="post">
     <label for="eesnimi">Eesnimi: </label>
     <?php if($messageFirst === "" && $messageSecond === ""): ?>
-        <input type="text" id="eesnimi" name="firstname" value="<?= $post["firstname"]?>"><br>
+        <input type="text" id="eesnimi" name="firstName" value="<?=$post["firstName"]?>"><br>
     <?php else: ?>
-        <input type="text" id="eesnimi" name="firstname" value="<?= $input?>"><br>
+        <input type="text" id="eesnimi" name="firstName" value="<?=$input?>"><br>
     <?php endif; ?>
 
     <label for="perenimi">Perekonnanimi: </label>
     <?php if($messageFirst === "" && $messageSecond === ""): ?>
-        <input type="text" id="perenimi" name="secondname" value="<?= $post["secondname"]?>"><br>
+        <input type="text" id="perenimi" name="lastName" value="<?=$post["lastName"]?>"><br>
     <?php else: ?>
-        <input type="text" id="perenimi" name="secondname" value="<?= $inputSecondname?>"><br>
+        <input type="text" id="perenimi" name="lastName" value="<?=$inputLastName?>"><br>
     <?php endif; ?>
 
     <label for="hinne1">Hinne: </label>
@@ -129,7 +129,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         <?php endif; ?>
     >5 <br>
     <?php if($messageFirst === "" && $messageSecond === ""): ?>
-        <input type="hidden" name="original-firstname" value="<?= $post["firstname"]?>">
+        <input type="hidden" name="original-firstname" value="<?= $post["firstName"]?>">
     <?php else: ?>
         <input type="hidden" name="original-firstname" value="<?= $originalFirstname?>">
     <?php endif; ?>
@@ -137,7 +137,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     <input type="submit" id="submitButton" name="submitButton" value="Salvesta">
 </form>
 <form action="delete-author.php" method="post">
-    <input type="hidden" name="post-to-delete" value="<?= $post["firstname"]?>"/>
+    <?php if($messageFirst === "" && $messageSecond === ""): ?>
+        <input type="hidden" name="post-to-delete" value="<?= $post["firstName"]?>"/>
+    <?php else: ?>
+        <input type="hidden" name="post-to-delete" value="<?= $originalFirstname?>"/>
+    <?php endif; ?>
     <input type="submit" name="deleteButton" value="Kustuta"/>
 </form>
 <footer>ICD0007 Näidisrakendus</footer>
