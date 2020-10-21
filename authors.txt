@@ -1,11 +1,4 @@
-a,aa,%0D%0A%0D%0A
-671152e320,671152e321,5%0D%0A%0D%0A
-ee394b66b0,ee394b66b1,%0D%0A%0D%0A
-a,aa,%0D%0A%0D%0A
-f8c3ff68b0,f8c3ff68b1,5%0D%0A%0D%0A
-36f9b5e0d0,36f9b5e0d1,%0D%0A%0D%0A
-a,aa,%0D%0A%0D%0A
-1f9f25dc70,1f9f25dc71,5%0D%0A%0D%0A
-1a43d4d700,1a43d4d701,%0D%0A%0D%0A
-a,aa,%0D%0A%0D%0A
-bcb1438300,414f144b21,5%0D%0A
+taavi,ots,
+heli,kopter,
+uus,kuus,
+sdd,sdasdads,

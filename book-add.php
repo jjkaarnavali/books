@@ -1,17 +1,19 @@
 <?php
 require_once("functions.php");
+error_reporting(E_ALL ^ E_NOTICE);
+
 
 
 $message = "";
+$author1 = 0;
+$author2 = 0;
 
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
     $input = isset($_POST["title"])
         ? $_POST["title"]
         : "";
-    $inputAuthor = isset($_POST["author"])
-        ? $_POST["author"]
-        : "";
+
     $inputread = isset($_POST["isRead"])
         ? $_POST["isRead"]
         : false;
@@ -26,10 +28,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     }else{
 
         $title = trim($_POST["title"]);
-        $author = trim($_POST["author"]);
+        $author1 = $_POST["author1"];
+        $author2 = $_POST["author2"];
         $grade = $_POST["grade"];
+        $isRead = $_POST["isRead"];
 
-        addBook($title, $author, $grade);
+        addBook($title, $author1, $author2, $grade, $isRead);
 
         header("Location: index.php?message=success");
 
@@ -38,6 +42,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
 
 }
+$posts = getAuthorsPosts();
 
 
 ?>
@@ -70,27 +75,30 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         <input type="text" id="title" name="title" ><br>
     <?php endif; ?>
 
-    <label for="A1">Autor 1: </label>
-    <select id="A1">
-        <option></option>
-        <option>Kivirähk</option>
-        <option>Runnel</option>
-        <option>Tolkien</option>
+    <label for="author1">Autor 1: </label>
+    <select id="author1" name="author1">
+        <option value="0"></option>
+        <?php
+        foreach ($posts as $post):?>
+            <option value="<?=$post["id"]?>"><?=$post["firstName"]?> <?=$post["lastName"]?></option>
+        <?php endforeach; ?>
     </select><br>
-    <label for="A2">Autor 2: </label>
-    <select id="A2">
-        <option></option>
-        <option>Kivirähk</option>
-        <option>Runnel</option>
-        <option>Tolkien</option>
+    <label for="author2">Autor 2: </label>
+    <select id="author2" name="author2">
+        <option value="0"></option>
+        <?php
+        foreach ($posts as $post):?>
+            <option value="<?=$post["id"]?>"><?=$post["firstName"]?> <?=$post["lastName"]?></option>
+        <?php endforeach; ?>
     </select><br>
     <label for="isRead">Loetud: </label>
-    <input type="checkbox" id="isRead" name="isRead"
+    <input type="checkbox" id="isRead" value="1" name="isRead"
         <?php
         if ($inputread == true): ?>
             checked="checked"
         <?php endif; ?>
     > <br>
+    <?php print_r($_POST["isRead"]) ?>
     <label for="hinne1">Hinne: </label>
     <input type="radio" id="hinne1" name="grade" value="1"
         <?php

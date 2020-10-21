@@ -1,5 +1,6 @@
 <?php
 require_once("functions.php");
+error_reporting(E_ALL ^ E_NOTICE);
 
 
 $message = "";
@@ -35,6 +36,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $post = getBookByTitle($title);
 
 }
+$posts = getAuthorsPosts();
 
 ?>
 
@@ -71,16 +73,18 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     <label for="A1">Autor 1: </label>
     <select id="A1">
         <option></option>
-        <option>Kivirähk</option>
-        <option>Runnel</option>
-        <option>Tolkien</option>
+        <?php
+        foreach ($posts as $post):?>
+            <option><?=$post["firstName"]?> <?=$post["lastName"]?></option>
+        <?php endforeach; ?>
     </select><br>
     <label for="A2">Autor 2: </label>
     <select id="A2">
         <option></option>
-        <option>Kivirähk</option>
-        <option>Runnel</option>
-        <option>Tolkien</option>
+        <?php
+        foreach ($posts as $post):?>
+            <option><?=$post["firstName"]?> <?=$post["lastName"]?></option>
+        <?php endforeach; ?>
     </select><br>
     <label for="isRead">Loetud: </label>
     <input type="checkbox" id="isRead" name="isRead"

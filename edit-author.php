@@ -1,5 +1,7 @@
 <?php
 require_once("functions.php");
+error_reporting(E_ALL ^ E_NOTICE);
+
 
 
 $messageFirst = "";

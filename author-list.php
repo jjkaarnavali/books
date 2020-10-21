@@ -1,6 +1,7 @@
 <?php
 require_once("functions.php");
 $message = "";
+error_reporting(E_ALL ^ E_NOTICE);
 
 $success = $_GET["message"];
 if ($success == "success")
@@ -46,7 +47,7 @@ $posts = getAuthorsPosts();
         <tr>
             <td><a href="edit-author.php?firstName=<?=$post["firstName"]?>"><?=$post["firstName"]?></a></td>
             <td><?=$post["lastName"]?></td>
-            <td><?=$post["grade"]?></td>
+            <td><?=$post["author_grade"]?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

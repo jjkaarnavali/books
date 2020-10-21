@@ -2,6 +2,8 @@
 require_once("functions.php");
 $message = "";
 
+error_reporting(E_ALL ^ E_NOTICE);
+
 $success = $_GET["message"];
 if ($success == "success")
     $message = "Lisatud!";
@@ -10,6 +12,7 @@ if ($success == "changed")
 if ($success == "deleted")
     $message = "Kustutatud!";
 $posts = getBooksPosts();
+
 ?>
 
 <!DOCTYPE html>
@@ -45,8 +48,8 @@ $posts = getBooksPosts();
     <?php foreach ($posts as $post): ?>
         <tr>
             <td><a href="edit-book.php?title=<?=$post["title"]?>"><?=$post["title"]?></a></td>
-            <td><?=$post["author"]?></td>
-            <td><?=$post["grade"]?></td>
+            <td><?=$post["author1"]?> <?=$post["author2"]?></td>
+            <td><?=$post["book_grade"]?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
