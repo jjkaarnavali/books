@@ -3,7 +3,6 @@ require_once("functions.php");
 error_reporting(E_ALL ^ E_NOTICE);
 
 
-
 $messageFirst = "";
 $messageSecond = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
@@ -33,18 +32,17 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         $firstName = trim($_POST["firstName"]);
         $lastName = trim($_POST["lastName"]);
         $grade = $_POST["grade"];
-        editAuthor($originalFirstName, $firstName, $lastName, $grade);
+        $originalId = $_POST["original-id"];
+        editAuthor($originalFirstName, $firstName, $lastName, $grade, $originalId);
         header("Location: author-list.php?message=changed");
     }
 
-
 }else{
-    $firstName = $_GET["firstName"];
-    $originalFirstname = $firstName;
-    $post = getAuthorByFirstname($firstName);
-
+    $id = $_GET["id"];
+    $originalId = $id;
+    $post = getAuthorByFirstname($id);
+    $originalFirstname = $post['firstName'];
 }
-
 
 ?>
 <!DOCTYPE html>
@@ -81,7 +79,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     <label for="perenimi">Perekonnanimi: </label>
     <?php if($messageFirst !== "" || $messageSecond !== ""): ?>
         <input type="text" id="perenimi" name="lastName" value="<?=$inputLastName?>"><br>
-        <input type="text" id="perenimi" name="lastName" value="<?=$post["lastName"]?>"><br>
+
     <?php else: ?>
         <input type="text" id="perenimi" name="lastName" value="<?=$post["lastName"]?>"><br>
     <?php endif; ?>
@@ -89,7 +87,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     <label for="hinne1">Hinne: </label>
     <input type="radio" id="hinne1" name="grade" value="1"
         <?php
-        if ($post["grade"] == 1): ?>
+        if ($post["author_grade"] == 1): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 1): ?>
@@ -98,7 +96,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     >1
     <input type="radio" id="hinne2" name="grade" value="2"
         <?php
-        if ($post["grade"] == 2): ?>
+        if ($post["author_grade"] == 2): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 2): ?>
@@ -107,7 +105,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     >2
     <input type="radio" id="hinne3" name="grade" value="3"
         <?php
-        if ($post["grade"] == 3): ?>
+        if ($post["author_grade"] == 3): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 3): ?>
@@ -116,7 +114,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     >3
     <input type="radio" id="hinne4" name="grade" value="4"
         <?php
-        if ($post["grade"] == 4): ?>
+        if ($post["author_grade"] == 4): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 4): ?>
@@ -125,7 +123,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     >4
     <input type="radio" id="hinne5" name="grade" value="5"
         <?php
-        if ($post["grade"] == 5): ?>
+        if ($post["author_grade"] == 5): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 5): ?>
@@ -139,16 +137,15 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         <input type="hidden" name="original-firstname" value="<?=$post["firstName"]?>">
 
     <?php endif; ?>
+    <input type="hidden" name="original-id" value="<?= $originalId?>">
 
     <input type="submit" id="submitButton" name="submitButton" value="Salvesta">
 
 </form>
 <form action="delete-author.php" method="post">
-    <?php if($messageFirst === "" && $messageSecond === ""): ?>
-        <input type="hidden" name="post-to-delete" value="<?= $post["firstName"]?>"/>
-    <?php else: ?>
-        <input type="hidden" name="post-to-delete" value="<?=$originalFirstname?>"/>
-    <?php endif; ?>
+
+    <input type="hidden" name="post-to-delete" value="<?=$originalId?>"/>
+
     <input type="submit" name="deleteButton" value="Kustuta"/>
 </form>
 <footer>ICD0007 Näidisrakendus</footer>

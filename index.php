@@ -47,8 +47,12 @@ $posts = getBooksPosts();
 
     <?php foreach ($posts as $post): ?>
         <tr>
-            <td><a href="edit-book.php?title=<?=$post["title"]?>"><?=$post["title"]?></a></td>
-            <td><?=$post["author1"]?> <?=$post["author2"]?></td>
+            <td><a href="edit-book.php?id=<?=$post['id']?>"><?=$post["title"]?></a></td>
+            <?php if ($post["author2"] != ""): ?>
+                <td><?=$post["author1"]?>, <?=$post["author2"]?></td>
+            <?php else: ?>
+                <td><?=$post["author1"]?></td>
+            <?php endif; ?>
             <td><?=$post["book_grade"]?></td>
         </tr>
     <?php endforeach; ?>

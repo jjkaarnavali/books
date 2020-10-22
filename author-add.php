@@ -37,12 +37,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
         header("Location: author-list.php?message=success");
 
-
     }
 
-
 }
-
 
 ?>
 
@@ -118,10 +115,8 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         <?php endif; ?>
     >5 <br>
 
-
     <input type="submit" id="submitButton" name="submitButton" value="Salvesta">
 </form>
-
 
 <footer>ICD0007 Näidisrakendus</footer>
 </body>

@@ -11,6 +11,7 @@ if ($success == "changed")
 if ($success == "deleted")
     $message = "Kustutatud!";
 $posts = getAuthorsPosts();
+
 ?>
 
 <!DOCTYPE html>
@@ -45,7 +46,7 @@ $posts = getAuthorsPosts();
 
     <?php foreach ($posts as $post): ?>
         <tr>
-            <td><a href="edit-author.php?firstName=<?=$post["firstName"]?>"><?=$post["firstName"]?></a></td>
+            <td><a href="edit-author.php?id=<?=$post["id"]?>"><?=$post["firstName"]?></a></td>
             <td><?=$post["lastName"]?></td>
             <td><?=$post["author_grade"]?></td>
         </tr>

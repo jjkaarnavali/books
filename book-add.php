@@ -37,13 +37,10 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
         header("Location: index.php?message=success");
 
-
     }
-
 
 }
 $posts = getAuthorsPosts();
-
 
 ?>
 
@@ -131,7 +128,6 @@ $posts = getAuthorsPosts();
         <?php endif; ?>
     >5 <br>
     <input type="submit" id="submitButton" name="submitButton" value="Lisa">
-
 
 </form>
 <footer>ICD0007 Näidisrakendus</footer>

@@ -2,7 +2,6 @@
 require_once("functions.php");
 error_reporting(E_ALL ^ E_NOTICE);
 
-
 $message = "";
 if ($_SERVER["REQUEST_METHOD"] === "POST"){
     $originalTitle = $_POST["original-title"];
@@ -11,7 +10,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         : "";
     $inputread = isset($_POST["isRead"])
         ? $_POST["isRead"]
-        : false;
+        : 0;
     $inputgrade = isset($_POST["grade"])
         ? $_POST["grade"]
         : 0;
@@ -22,21 +21,26 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
     }else{
         $originalTitle = $_POST["original-title"];
+        $originalId = $_POST["original-id"];
         $title = trim($_POST["title"]);
-        $author = trim($_POST["author"]);
+        $author1id = $_POST["author1"];
+        $author2id = $_POST["author2"];
         $grade = $_POST["grade"];
-        editBook($originalTitle, $title, $author, $grade);
+        $is_read = $_POST["isRead"];
+        editBook($originalTitle, $title, $author1id, $author2id, $grade, $originalId, $is_read);
         header("Location: index.php?message=changed");
     }
 
-
 }else{
-    $title = $_GET["title"];
-    $originalTitle = $title;
-    $post = getBookByTitle($title);
+    $id = $_GET["id"];
+    $post = getBookByTitle($id);
+    $originalId = $post['id'];
+    $originalTitle = $post['title'];
+    list($a1first, $a1last) = explode(" ", $post['author1']);
+    list($a2first, $a2last) = explode(" ", $post['author2']);
 
 }
-$posts = getAuthorsPosts();
+$authorsPosts = getAuthorsPosts();
 
 ?>
 
@@ -70,36 +74,42 @@ $posts = getAuthorsPosts();
     <?php endif; ?>
 
 
-    <label for="A1">Autor 1: </label>
-    <select id="A1">
-        <option></option>
+    <label for="author1">Autor 1: </label>
+    <select id="author1" name="author1">
+        <option value="0"></option>
         <?php
-        foreach ($posts as $post):?>
-            <option><?=$post["firstName"]?> <?=$post["lastName"]?></option>
+        foreach ($authorsPosts as $apost):?>
+            <option value="<?=$apost["id"]?>" <?php if ($a1first == $apost["firstName"] && $a1last == $apost["lastName"]): ?>
+               selected="selected"
+               <?php endif; ?>
+            ><?=$apost["firstName"]?> <?=$apost["lastName"]?></option>
         <?php endforeach; ?>
     </select><br>
-    <label for="A2">Autor 2: </label>
-    <select id="A2">
-        <option></option>
+    <label for="author2">Autor 2: </label>
+    <select id="author2" name="author2">
+        <option value="0"></option>
         <?php
-        foreach ($posts as $post):?>
-            <option><?=$post["firstName"]?> <?=$post["lastName"]?></option>
+        foreach ($authorsPosts as $apost):?>
+            <option value="<?=$apost["id"]?>" <?php if ($a2first == $apost["firstName"] && $a2last == $apost["lastName"]): ?>
+                selected="selected"
+            <?php endif; ?>
+            ><?=$apost["firstName"]?> <?=$apost["lastName"]?></option>
         <?php endforeach; ?>
     </select><br>
     <label for="isRead">Loetud: </label>
-    <input type="checkbox" id="isRead" name="isRead"
+    <input type="checkbox" id="isRead" name="isRead" value="1"
         <?php
-        if ($post["isRead"] == true): ?>
-            checked="checked"
+        if ($post["is_read"] == 1): ?>
+            checked="checked" value="1"
         <?php
         elseif ($inputread == true): ?>
-            checked="checked"
+            checked="checked" value="1"
         <?php endif; ?>
     > <br>
     <label for="hinne1">Hinne: </label>
     <input type="radio" id="hinne1" name="grade" value="1"
         <?php
-    if ($post["grade"] == 1): ?>
+    if ($post["book_grade"] == 1): ?>
         checked="checked"
     <?php
     elseif ($inputgrade == 1): ?>
@@ -108,7 +118,7 @@ $posts = getAuthorsPosts();
     >1
     <input type="radio" id="hinne2" name="grade" value="2"
         <?php
-        if ($post["grade"] == 2): ?>
+        if ($post["book_grade"] == 2): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 2): ?>
@@ -117,7 +127,7 @@ $posts = getAuthorsPosts();
     >2
     <input type="radio" id="hinne3" name="grade" value="3"
         <?php
-        if ($post["grade"] == 3): ?>
+        if ($post["book_grade"] == 3): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 3): ?>
@@ -126,7 +136,7 @@ $posts = getAuthorsPosts();
     >3
     <input type="radio" id="hinne4" name="grade" value="4"
         <?php
-        if ($post["grade"] == 4): ?>
+        if ($post["book_grade"] == 4): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 4): ?>
@@ -135,7 +145,7 @@ $posts = getAuthorsPosts();
     >4
     <input type="radio" id="hinne5" name="grade" value="5"
         <?php
-        if ($post["grade"] == 5): ?>
+        if ($post["book_grade"] == 5): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 5): ?>
@@ -149,16 +159,15 @@ $posts = getAuthorsPosts();
         <input type="hidden" name="original-title" value="<?= $post["title"]?>">
 
     <?php endif; ?>
+    <input type="hidden" name="original-id" value="<?= $originalId?>">
 
     <input type="submit" id="submitButton" name="submitButton" value="Salvesta"/>
 
 </form>
 <form action="delete-book.php" method="post">
-    <?php if($message === ""): ?>
-        <input type="hidden" name="post-to-delete" value="<?= $post["title"]?>"/>
-    <?php else: ?>
-        <input type="hidden" name="post-to-delete" value="<?= $originalTitle?>"/>
-    <?php endif; ?>
+
+        <input type="hidden" name="post-to-delete" value="<?= $originalId?>"/>
+
     <input type="submit" name="deleteButton" value="Kustuta"/>
 </form>
 <footer>ICD0007 Näidisrakendus</footer>
