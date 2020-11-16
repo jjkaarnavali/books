@@ -22,14 +22,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         $message = "Pealkiri peab sisaldama 3 kuni 23 märki!";
 
     }else{
-        $originalTitle = $_POST["original-title"];
         $originalId = $_POST["original-id"];
         $title = trim($_POST["title"]);
         $author1id = $_POST["author1"];
         $author2id = $_POST["author2"];
         $grade = $_POST["grade"];
         $is_read = $_POST["isRead"];
-        editBook($originalTitle, $title, $author1id, $author2id, $grade, $originalId, $is_read);
+        editBook($title, $author1id, $author2id, $grade, $originalId, $is_read);
         header("Location: index.php?message=changed");
     }
 

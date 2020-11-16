@@ -139,7 +139,7 @@ WHERE id = :authorId');
     $delAut2->execute();
 
 }
-function editBook($originalTitle, $title, $author1id, $author2id, $grade, $originalId, $is_read){
+function editBook($title, $author1id, $author2id, $grade, $originalId, $is_read){
     $connection = new PDO(address, username, parool,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     $edBook1 = $connection->prepare(
@@ -215,7 +215,7 @@ function editBook($originalTitle, $title, $author1id, $author2id, $grade, $origi
     }
 
 }
-function editAuthor($originalFirstName, $firstName, $lastName, $grade, $originalId){
+function editAuthor($firstName, $lastName, $grade, $originalId){
 
     $connection = new PDO(address, username, parool,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);

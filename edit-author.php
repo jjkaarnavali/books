@@ -28,12 +28,11 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         $messageSecond = "Perenimi peab sisaldama 2 kuni 22 märki!";
 
     }else{
-        $originalFirstName = $_POST["original-firstname"];
         $firstName = trim($_POST["firstName"]);
         $lastName = trim($_POST["lastName"]);
         $grade = $_POST["grade"];
         $originalId = $_POST["original-id"];
-        editAuthor($originalFirstName, $firstName, $lastName, $grade, $originalId);
+        editAuthor($firstName, $lastName, $grade, $originalId);
         header("Location: author-list.php?message=changed");
     }
 
