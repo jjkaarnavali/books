@@ -40,8 +40,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 }else{
     $id = $_GET["id"];
     $originalId = $id;
-    $post = getAuthorByFirstname($id);
-    $originalFirstname = $post['firstName'];
+    $author = getAuthorByFirstname($id);
+    $originalFirstname = $author->firstName;
+
 }
 
 ?>
@@ -73,7 +74,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     <?php if($messageFirst !== "" || $messageSecond !== ""): ?>
         <input type="text" id="eesnimi" name="firstName" value="<?=$input?>"><br>
     <?php else: ?>
-        <input type="text" id="eesnimi" name="firstName" value="<?=$post["firstName"]?>"><br>
+        <input type="text" id="eesnimi" name="firstName" value="<?=$author->firstName?>"><br>
     <?php endif; ?>
 
     <label for="perenimi">Perekonnanimi: </label>
@@ -81,13 +82,13 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         <input type="text" id="perenimi" name="lastName" value="<?=$inputLastName?>"><br>
 
     <?php else: ?>
-        <input type="text" id="perenimi" name="lastName" value="<?=$post["lastName"]?>"><br>
+        <input type="text" id="perenimi" name="lastName" value="<?=$author->lastName?>"><br>
     <?php endif; ?>
 
     <label for="hinne1">Hinne: </label>
     <input type="radio" id="hinne1" name="grade" value="1"
         <?php
-        if ($post["author_grade"] == 1): ?>
+        if ($author->authorGrade == 1): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 1): ?>
@@ -96,7 +97,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     >1
     <input type="radio" id="hinne2" name="grade" value="2"
         <?php
-        if ($post["author_grade"] == 2): ?>
+        if ($author->authorGrade == 2): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 2): ?>
@@ -105,7 +106,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     >2
     <input type="radio" id="hinne3" name="grade" value="3"
         <?php
-        if ($post["author_grade"] == 3): ?>
+        if ($author->authorGrade == 3): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 3): ?>
@@ -114,7 +115,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     >3
     <input type="radio" id="hinne4" name="grade" value="4"
         <?php
-        if ($post["author_grade"] == 4): ?>
+        if ($author->authorGrade == 4): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 4): ?>
@@ -123,7 +124,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     >4
     <input type="radio" id="hinne5" name="grade" value="5"
         <?php
-        if ($post["author_grade"] == 5): ?>
+        if ($author->authorGrade == 5): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 5): ?>
@@ -134,7 +135,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         <input type="hidden" name="original-firstname" value="<?=$originalFirstname?>">
 
     <?php else: ?>
-        <input type="hidden" name="original-firstname" value="<?=$post["firstName"]?>">
+        <input type="hidden" name="original-firstname" value="<?=$author->firstName?>">
 
     <?php endif; ?>
     <input type="hidden" name="original-id" value="<?= $originalId?>">

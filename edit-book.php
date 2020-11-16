@@ -1,5 +1,7 @@
 <?php
 require_once("functions.php");
+require_once("AuthorDao.php");
+require_once("Author.php");
 error_reporting(E_ALL ^ E_NOTICE);
 
 $message = "";
@@ -33,14 +35,16 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
 }else{
     $id = $_GET["id"];
-    $post = getBookByTitle($id);
-    $originalId = $post['id'];
-    $originalTitle = $post['title'];
-    list($a1first, $a1last) = explode(" ", $post['author1']);
-    list($a2first, $a2last) = explode(" ", $post['author2']);
+    $book = getBookByTitle($id);
+    $originalId = $book->id;
+    $originalTitle = $book->title;
+    $a1 = $book->author1;
+    $a2 = $book->author2;
+
 
 }
-$authorsPosts = getAuthorsPosts();
+$dto = new AuthorDao();
+$authors = $dto->getAuthorsPosts();
 
 ?>
 
@@ -70,7 +74,7 @@ $authorsPosts = getAuthorsPosts();
     <?php if($message !== ""): ?>
         <input type="text" id="title" name="title" value="<?= $input?>"><br>
     <?php else: ?>
-        <input type="text" id="title" name="title" value="<?= $post["title"]?>"><br>
+        <input type="text" id="title" name="title" value="<?= $book->title?>"><br>
     <?php endif; ?>
 
 
@@ -78,28 +82,28 @@ $authorsPosts = getAuthorsPosts();
     <select id="author1" name="author1">
         <option value="0"></option>
         <?php
-        foreach ($authorsPosts as $apost):?>
-            <option value="<?=$apost["id"]?>" <?php if ($a1first == $apost["firstName"] && $a1last == $apost["lastName"]): ?>
+        foreach ($authors as $author):?>
+            <option value="<?=$author->id?>" <?php if ($a1 == $author->firstName .  ' ' . $author->lastName): ?>
                selected="selected"
                <?php endif; ?>
-            ><?=$apost["firstName"]?> <?=$apost["lastName"]?></option>
+            ><?=$author->firstName?> <?=$author->lastName?></option>
         <?php endforeach; ?>
     </select><br>
     <label for="author2">Autor 2: </label>
     <select id="author2" name="author2">
         <option value="0"></option>
         <?php
-        foreach ($authorsPosts as $apost):?>
-            <option value="<?=$apost["id"]?>" <?php if ($a2first == $apost["firstName"] && $a2last == $apost["lastName"]): ?>
+        foreach ($authors as $author):?>
+            <option value="<?=$author->id?>" <?php if ($a2 == $author->firstName . ' ' . $author->lastName): ?>
                 selected="selected"
             <?php endif; ?>
-            ><?=$apost["firstName"]?> <?=$apost["lastName"]?></option>
+            ><?=$author->firstName?> <?=$author->lastName?></option>
         <?php endforeach; ?>
     </select><br>
     <label for="isRead">Loetud: </label>
     <input type="checkbox" id="isRead" name="isRead" value="1"
         <?php
-        if ($post["is_read"] == 1): ?>
+        if ($book->isRead == 1): ?>
             checked="checked" value="1"
         <?php
         elseif ($inputread == true): ?>
@@ -109,7 +113,7 @@ $authorsPosts = getAuthorsPosts();
     <label for="hinne1">Hinne: </label>
     <input type="radio" id="hinne1" name="grade" value="1"
         <?php
-    if ($post["book_grade"] == 1): ?>
+    if ($book->grade == 1): ?>
         checked="checked"
     <?php
     elseif ($inputgrade == 1): ?>
@@ -118,7 +122,7 @@ $authorsPosts = getAuthorsPosts();
     >1
     <input type="radio" id="hinne2" name="grade" value="2"
         <?php
-        if ($post["book_grade"] == 2): ?>
+        if ($book->grade == 2): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 2): ?>
@@ -127,7 +131,7 @@ $authorsPosts = getAuthorsPosts();
     >2
     <input type="radio" id="hinne3" name="grade" value="3"
         <?php
-        if ($post["book_grade"] == 3): ?>
+        if ($book->grade == 3): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 3): ?>
@@ -136,7 +140,7 @@ $authorsPosts = getAuthorsPosts();
     >3
     <input type="radio" id="hinne4" name="grade" value="4"
         <?php
-        if ($post["book_grade"] == 4): ?>
+        if ($book->grade == 4): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 4): ?>
@@ -145,7 +149,7 @@ $authorsPosts = getAuthorsPosts();
     >4
     <input type="radio" id="hinne5" name="grade" value="5"
         <?php
-        if ($post["book_grade"] == 5): ?>
+        if ($book->grade == 5): ?>
             checked="checked"
         <?php
         elseif ($inputgrade == 5): ?>
@@ -156,7 +160,7 @@ $authorsPosts = getAuthorsPosts();
         <input type="hidden" name="original-title" value="<?= $originalTitle?>">
 
     <?php else: ?>
-        <input type="hidden" name="original-title" value="<?= $post["title"]?>">
+        <input type="hidden" name="original-title" value="<?= $book->title?>">
 
     <?php endif; ?>
     <input type="hidden" name="original-id" value="<?= $originalId?>">

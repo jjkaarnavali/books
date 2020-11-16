@@ -1,5 +1,7 @@
 <?php
 require_once("functions.php");
+require_once("AuthorDao.php");
+require_once("Author.php");
 error_reporting(E_ALL ^ E_NOTICE);
 
 
@@ -26,21 +28,38 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         $message = "Pealkiri peab sisaldama 3 kuni 23 märki!";
 
     }else{
+        $dto = new AuthorDao();
+        $authors = $dto->getAuthorsPosts();
+        $author1 = '';
+        $author2 = '';
+        foreach ($authors as $author){
+            if ($author->id === $_POST["author1"]){
+                $author1 = $author->firstName + $author->lastName;
+            }
+            if ($author->id === $_POST["author2"]){
+                $author2 = $author->firstName + $author->lastName;
+            }
+        }
 
         $title = trim($_POST["title"]);
-        $author1 = $_POST["author1"];
-        $author2 = $_POST["author2"];
+
         $grade = $_POST["grade"];
         $isRead = $_POST["isRead"];
 
-        addBook($title, $author1, $author2, $grade, $isRead);
+        $book = new Book(trim($_POST["title"]), $_POST["grade"], $_POST["isRead"], '', $author1, $author2);
+
+
+        addBook($book, $_POST["author1"], $_POST["author2"]);
 
         header("Location: index.php?message=success");
 
     }
 
 }
-$posts = getAuthorsPosts();
+
+$dto = new AuthorDao();
+$authors = $dto->getAuthorsPosts();
+
 
 ?>
 
@@ -76,16 +95,16 @@ $posts = getAuthorsPosts();
     <select id="author1" name="author1">
         <option value="0"></option>
         <?php
-        foreach ($posts as $post):?>
-            <option value="<?=$post["id"]?>"><?=$post["firstName"]?> <?=$post["lastName"]?></option>
+        foreach ($authors as $author):?>
+            <option value="<?=$author->id?>"><?=$author->firstName?> <?=$author->lastName?></option>
         <?php endforeach; ?>
     </select><br>
     <label for="author2">Autor 2: </label>
     <select id="author2" name="author2">
         <option value="0"></option>
         <?php
-        foreach ($posts as $post):?>
-            <option value="<?=$post["id"]?>"><?=$post["firstName"]?> <?=$post["lastName"]?></option>
+        foreach ($authors as $author):?>
+            <option value="<?=$author->id?>"><?=$author->firstName?> <?=$author->lastName?></option>
         <?php endforeach; ?>
     </select><br>
     <label for="isRead">Loetud: </label>
@@ -128,6 +147,7 @@ $posts = getAuthorsPosts();
         <?php endif; ?>
     >5 <br>
     <input type="submit" id="submitButton" name="submitButton" value="Lisa">
+
 
 </form>
 <footer>ICD0007 Näidisrakendus</footer>

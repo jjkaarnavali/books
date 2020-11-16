@@ -1,5 +1,5 @@
 <?php
-require_once("functions.php");
+require_once("authorDao.php");
 $message = "";
 error_reporting(E_ALL ^ E_NOTICE);
 
@@ -10,7 +10,9 @@ if ($success == "changed")
     $message = "Muudetud!";
 if ($success == "deleted")
     $message = "Kustutatud!";
-$posts = getAuthorsPosts();
+
+$dto = new AuthorDao();
+$authors = $dto->getAuthorsPosts();
 
 ?>
 
@@ -44,11 +46,11 @@ $posts = getAuthorsPosts();
     </thead>
     <tbody>
 
-    <?php foreach ($posts as $post): ?>
+    <?php foreach ($authors as $author):?>
         <tr>
-            <td><a href="edit-author.php?id=<?=$post["id"]?>"><?=$post["firstName"]?></a></td>
-            <td><?=$post["lastName"]?></td>
-            <td><?=$post["author_grade"]?></td>
+            <td><a href="edit-author.php?id=<?=$author->id?>"><?=$author->firstName?></a></td>
+            <td><?=$author->lastName?></td>
+            <td><?=$author->authorGrade?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>

@@ -33,7 +33,9 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
         $lastName = trim($_POST["lastName"]);
         $grade = $_POST["grade"];
 
-        addAuthor($firstName, $lastName, $grade);
+        $author = new Author($firstName, $lastName, $grade, '');
+
+        addAuthor($author);
 
         header("Location: author-list.php?message=success");
 

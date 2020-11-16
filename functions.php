@@ -1,5 +1,8 @@
 <?php
-
+require_once("Book.php");
+require_once("Author.php");
+require_once("BookDao.php");
+require_once("AuthorDao.php");
 const username = "jakaar";
 const parool = "0771";
 
@@ -7,132 +10,90 @@ const address = "mysql:host=db.mkalmo.xyz;dbname=jakaar";
 
 
 
-function getBooksPosts(){
-    $connection = new PDO(address, username, parool,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
 
-    $stmt = $connection->prepare(
-        'SELECT book.id, book.title, book.book_grade, book.is_read, book_author.book_id, book_author.author_id, author.id, author.firstName, author.lastName
-FROM book_author
-
-         LEFT JOIN book
-                   ON book.id = book_author.book_id
-         LEFT JOIN author
-                   ON author.id = book_author.author_id;');
-
-    $stmt->execute();
-    $posts[] = [];
-    $i = 0;
-
-    foreach($stmt as $row) {
-        if ($row['book_id'] === $posts[$i]['id']){
-
-            $posts[$i]['author2'] .= "{$row['firstName']} {$row['lastName']}";
-
-        }else {
-            $posts[] = ["title" => $row['title'], "author1" => "{$row['firstName']} {$row['lastName']}",
-                "author2" => "",
-                "book_grade" => $row['book_grade'], "is_read" => $row['is_read'], "id" => $row['book_id']];
-            $i += 1;
-
-        }
-    }
-
-    return $posts;
-}
-function getAuthorsPosts(){
-    $connection = new PDO(address, username, parool,
-        [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
-    $posts = [];
-    $stmt = $connection->prepare(
-        'SELECT firstName, lastName, author_grade, id FROM author');
-    $stmt->execute();
-    foreach($stmt as $row) {
-        $posts[] = ["firstName" => $row['firstName'] , "lastName" => $row['lastName'],
-            "author_grade" => $row['author_grade'], "id" => $row['id']];
-    }
-
-    return $posts;
-}
 function getBookByTitle($id){
-    $posts = getBooksPosts();
-    foreach ($posts as $post){
-        if ($post["id"] == $id){
-            return $post;
+    $dto = new BookDao();
+    $books = $dto->getBooksPosts();
+    foreach ($books as $book){
+        if ($book->id == $id){
+            return $book;
         }
     }
     return null;
 }
 function getAuthorByFirstname($id){
-    $posts = getAuthorsPosts();
-    foreach ($posts as $post){
-        if ($post["id"] == $id){
-            return $post;
+    $dto = new AuthorDao();
+    $authors = $dto->getAuthorsPosts();
+    foreach ($authors as $author){
+        if ($author->id == $id){
+            return $author;
         }
     }
     return null;
 }
 
-function addBook($title, $author1, $author2, $grade, $isRead){
+function addBook(Book $book, $author1id, $author2id){
+
+
 
     $connection = new PDO(address, username, parool,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     $stmt1 = $connection->prepare(
         'insert into book (title, book_grade, is_read)
     values (:title, :book_grade, :isRead)');
-    $stmt1->bindValue(':title', $title);
-    $stmt1->bindValue(':book_grade', $grade);
-    $stmt1->bindValue(':isRead', $isRead);
+    $stmt1->bindValue(':title', $book->title);
+    $stmt1->bindValue(':book_grade', $book->grade);
+    $stmt1->bindValue(':isRead', $book->isRead);
     $stmt1->execute();
     $book_id = $connection->lastInsertId();
 
-    if ($author1 == "0" && $author2 == "0"){
+    if ($author1id == "0" && $author2id == "0"){
         $stmt2 = $connection->prepare(
             'insert into book_author (book_id, author_id)
     values (:book_id, :author_id)');
         $stmt2->bindValue(':book_id', $book_id);
         $stmt2->bindValue(':author_id', 0);
         $stmt2->execute();
-    }elseif ($author1 != "0" && $author2 != "0"){
+    }elseif ($author1id != "0" && $author2id != "0"){
         $stmt2 = $connection->prepare(
             'insert into book_author (book_id, author_id)
     values (:book_id, :author_id)');
         $stmt2->bindValue(':book_id', $book_id);
-        $stmt2->bindValue(':author_id', $author1);
+        $stmt2->bindValue(':author_id', $author1id);
         $stmt2->execute();
 
         $stmt2 = $connection->prepare(
             'insert into book_author (book_id, author_id)
     values (:book_id, :author_id)');
         $stmt2->bindValue(':book_id', $book_id);
-        $stmt2->bindValue(':author_id', $author2);
+        $stmt2->bindValue(':author_id', $author2id);
         $stmt2->execute();
-    }elseif ($author1 != "0" && $author2 == "0"){
+    }elseif ($author1id != "0" && $author2id == "0"){
         $stmt2 = $connection->prepare(
             'insert into book_author (book_id, author_id)
     values (:book_id, :author_id)');
         $stmt2->bindValue(':book_id', $book_id);
-        $stmt2->bindValue(':author_id', $author1);
+        $stmt2->bindValue(':author_id', $author1id);
         $stmt2->execute();
-    }elseif ($author1 == "0" && $author2 != "0"){
+    }elseif ($author1id == "0" && $author2id != "0"){
         $stmt2 = $connection->prepare(
             'insert into book_author (book_id, author_id)
     values (:book_id, :author_id)');
         $stmt2->bindValue(':book_id', $book_id);
-        $stmt2->bindValue(':author_id', $author2);
+        $stmt2->bindValue(':author_id', $author2id);
         $stmt2->execute();
     }
 
 }
-function addAuthor($firstName, $lastName, $grade){
+function addAuthor(Author $author){
     $connection = new PDO(address, username, parool,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     $addAut1 = $connection->prepare(
         'insert into author (firstName, lastName, author_grade)
     values (:firstName, :lastName, :author_grade)');
-    $addAut1->bindValue(':firstName', $firstName);
-    $addAut1->bindValue(':lastName', $lastName);
-    $addAut1->bindValue(':author_grade', $grade);
+    $addAut1->bindValue(':firstName', $author->firstName);
+    $addAut1->bindValue(':lastName', $author->lastName);
+    $addAut1->bindValue(':author_grade', $author->authorGrade);
     $addAut1->execute();
 
 }

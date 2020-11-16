@@ -1,5 +1,6 @@
 <?php
-require_once("functions.php");
+
+require_once("BookDao.php");
 $message = "";
 
 error_reporting(E_ALL ^ E_NOTICE);
@@ -11,7 +12,10 @@ if ($success == "changed")
     $message = "Muudetud!";
 if ($success == "deleted")
     $message = "Kustutatud!";
-$posts = getBooksPosts();
+
+
+$dto = new BookDao();
+$books = $dto->getBooksPosts();
 
 ?>
 
@@ -45,15 +49,16 @@ $posts = getBooksPosts();
     </thead>
     <tbody>
 
-    <?php foreach ($posts as $post): ?>
+    <?php foreach ($books as $book): ?>
         <tr>
-            <td><a href="edit-book.php?id=<?=$post['id']?>"><?=$post["title"]?></a></td>
-            <?php if ($post["author2"] != ""): ?>
-                <td><?=$post["author1"]?>, <?=$post["author2"]?></td>
+            <td><a href="edit-book.php?id=<?=$book->id?>"><?=$book->title?></a></td>
+
+            <?php if ($book->author2 != ""): ?>
+                <td><?=$book->author1?>, <?=$book->author2?></td>
             <?php else: ?>
-                <td><?=$post["author1"]?></td>
+                <td><?=$book->author1?></td>
             <?php endif; ?>
-            <td><?=$post["book_grade"]?></td>
+            <td><?=$book->grade?></td>
         </tr>
     <?php endforeach; ?>
     </tbody>
