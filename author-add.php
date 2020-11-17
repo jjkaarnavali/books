@@ -44,6 +44,7 @@ if ($_SERVER["REQUEST_METHOD"] === "GET"){
 
     }
 
+
 }
 if ($messageFirst == "" && $messageSecond == ""){
     $errors = [];
