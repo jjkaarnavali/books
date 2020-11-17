@@ -1,68 +1,167 @@
 <?php
 
+require_once("functions.php");
+require_once("AuthorDao.php");
+require_once("Author.php");
+require_once("Book.php");
 require_once("BookDao.php");
-$message = "";
+require_once 'vendor/tpl.php';
+require_once 'Request.php';
+$request = new Request($_REQUEST);
 
-error_reporting(E_ALL ^ E_NOTICE);
+$cmd = $request->param('cmd')
+    ?$request->param('cmd')
+    : 'book_list';
 
-$success = $_GET["message"];
-if ($success == "success")
-    $message = "Lisatud!";
-if ($success == "changed")
-    $message = "Muudetud!";
-if ($success == "deleted")
-    $message = "Kustutatud!";
+if ($cmd === 'book_list'){
+    $message = "";
+
+    error_reporting(E_ALL ^ E_NOTICE);
+
+    $success = $_GET["message"];
+    if ($success == "success")
+        $message = "Lisatud!";
+    if ($success == "changed")
+        $message = "Muudetud!";
+    if ($success == "deleted")
+        $message = "Kustutatud!";
 
 
-$dto = new BookDao();
-$books = $dto->getBooksPosts();
 
-?>
+    $dto = new BookDao();
+    $books = $dto->getBooksPosts();
 
-<!DOCTYPE html>
-<html lang="et">
-<head>
-    <meta charset="utf-8">
-    <title>Harjutustund 1</title>
-    <link href="books-style.css" rel="stylesheet">
-</head>
-<body>
-<nav class="header-row">
-    <a id="book-list-link" href="index.php">Raamatud</a>
-    <span> | </span>
-    <a id="book-form-link" href="book-add.php">Lisa raamat</a>
-    <span> | </span>
-    <a id="author-list-link" href="author-list.php">Autorid</a>
-    <span> | </span>
-    <a id="author-form-link" href="author-add.php">Lisa autor</a>
-</nav>
-<?php if($message !== ""): ?>
-    <div id="message-block"><?= $message?><br></div>
-<?php endif; ?>
-<table class="contents-list">
-    <thead>
-    <tr>
-        <th>Pealkiri</th>
-        <th>Autorid</th>
-        <th>Hinne</th>
-    </tr>
-    </thead>
-    <tbody>
+    $data = [
+        'message' => $message,
+        'books' => $books,
+        'contentPath' => 'book-list.html',
+        'cmd' => 'book_list'
+    ];
+    print renderTemplate('tpl/main.html', $data);
 
-    <?php foreach ($books as $book): ?>
-        <tr>
-            <td><a href="edit-book.php?id=<?=$book->id?>"><?=$book->title?></a></td>
 
-            <?php if ($book->author2 != ""): ?>
-                <td><?=$book->author1?>, <?=$book->author2?></td>
-            <?php else: ?>
-                <td><?=$book->author1?></td>
-            <?php endif; ?>
-            <td><?=$book->grade?></td>
-        </tr>
-    <?php endforeach; ?>
-    </tbody>
-</table>
-<footer>ICD0007 Näidisrakendus</footer>
-</body>
-</html>
+}elseif ($cmd === 'save_book_add'){
+
+
+
+    $dto = new AuthorDao();
+    $authors = $dto->getAuthorsPosts();
+    $author1 = isset($_POST["author1"])
+        ? $_POST["author1"]
+        : 0;
+    $author2 = isset($_POST["author2"])
+        ? $_POST["author2"]
+        : 0;
+
+
+    $title = isset($_POST["title"])
+        ? trim($_POST["title"])
+        : "";
+    $isRead = isset($_POST["isRead"])
+        ? $_POST["isRead"]
+        : 0;
+    $grade = isset($_POST["grade"])
+        ? $_POST["grade"]
+        : 0;
+
+
+
+    header("Location: book-add.php?title=$title&isRead=$isRead&grade=$grade&author1=$author1&author2=$author2");
+
+
+
+}elseif ($cmd === 'book_add'){
+
+    $new = 'new';
+    header("Location: book-add.php?newBook=$new");
+
+
+
+}elseif ($cmd === 'author_list'){
+    header("Location: author-list.php");
+
+
+}elseif ($cmd === 'save_author_add'){
+
+    $firstName = isset($_POST["firstName"])
+        ? trim($_POST["firstName"])
+        : "";
+    $lastName = isset($_POST["lastName"])
+        ? trim($_POST["lastName"])
+        : "";
+    $grade = isset($_POST["grade"])
+        ? $_POST["grade"]
+        : 0;
+
+    header("Location: author-add.php?firstName=$firstName&lastName=$lastName&grade=$grade");
+
+
+}elseif ($cmd === 'author_add'){
+
+    $new = 'new';
+    header("Location: author-add.php?newAuthor=$new");
+
+
+
+}elseif ($cmd === 'edit_book') {
+    $id = $request->param('id')
+        ?$request->param('id')
+        : 0;
+
+
+    header("Location: edit-book.php?id=$id");
+
+}elseif ($cmd === 'save_edit_book') {
+    $id = $request->param('original-id')
+        ?$request->param('original-id')
+        : 0;
+    $title = isset($_POST["title"])
+        ? trim($_POST["title"])
+        : "";
+    $isRead = isset($_POST["isRead"])
+        ? $_POST["isRead"]
+        : 0;
+    $grade = isset($_POST["grade"])
+        ? $_POST["grade"]
+        : 0;
+    $author1 = isset($_POST["author1"])
+        ? $_POST["author1"]
+        : 0;
+    $author2 = isset($_POST["author2"])
+        ? $_POST["author2"]
+        : 0;
+
+
+    header("Location: edit-book.php?id=$id&title=$title&isRead=$isRead&grade=$grade&author1=$author1&author2=$author2");
+
+}elseif ($cmd === 'edit_author'){
+    $id = $request->param('id')
+        ?$request->param('id')
+        : 'book_list';
+    header("Location: edit-author.php?id=$id");
+
+}elseif ($cmd === 'save_edit_author') {
+
+    $firstName = isset($_POST["firstName"])
+        ? trim($_POST["firstName"])
+        : "";
+    $lastName = isset($_POST["lastName"])
+        ? trim($_POST["lastName"])
+        : "";
+    $grade = isset($_POST["grade"])
+        ? $_POST["grade"]
+        : 0;
+    $id = $request->param('original-id')
+        ?$request->param('original-id')
+        : 0;
+
+
+
+    header("Location: edit-author.php?id=$id&firstName=$firstName&lastName=$lastName&grade=$grade");
+
+}
+
+
+
+
+

@@ -1,0 +1,37 @@
+<div id="message-block" tpl-if="$message">
+    <tpl>
+        {{ $message }}
+    </tpl>
+</div>
+
+<table class="contents-list">
+    <thead>
+    <tr>
+        <th>Pealkiri</th>
+        <th>Autorid</th>
+        <th>Hinne</th>
+    </tr>
+    </thead>
+    <tbody>
+
+
+    <tr tpl-foreach="$books as $book">
+        <td><a href="edit-book.php?id={{$book->id}}">{{$book->title}}</a></td>
+
+
+        <td tpl-if="$book->author2 != ''">{{$book->author1}}, {{$book->author2}}</td>
+
+        <td tpl-if="$book->author2 == ''">{{$book->author1}}</td>
+
+
+        <td class="score-empty" tpl-if="$book->title != ''">
+            <tpl tpl-foreach="range(1, 5) as $grade" tpl-trim-contents>
+                <span
+                        tpl-class="score-filled if $book->grade >= $grade">&#9733;
+                </span>
+            </tpl>
+        </td>
+    </tr>
+
+    </tbody>
+</table>

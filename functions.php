@@ -139,7 +139,7 @@ WHERE id = :authorId');
     $delAut2->execute();
 
 }
-function editBook($title, $author1id, $author2id, $grade, $originalId, $is_read){
+function editBook(Book $book, $author1id, $author2id){
     $connection = new PDO(address, username, parool,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
     $edBook1 = $connection->prepare(
@@ -147,15 +147,15 @@ function editBook($title, $author1id, $author2id, $grade, $originalId, $is_read)
         set title = :title, book_grade = :grade, is_read = :is_read
         WHERE id = :originalId
         ');
-    $edBook1->bindValue(':title', $title);
-    $edBook1->bindValue(':grade', $grade);
-    $edBook1->bindValue(':is_read', $is_read);
-    $edBook1->bindValue(':originalId', $originalId);
+    $edBook1->bindValue(':title', $book->title);
+    $edBook1->bindValue(':grade', $book->grade);
+    $edBook1->bindValue(':is_read', $book->isRead);
+    $edBook1->bindValue(':originalId', $book->id);
     $edBook1->execute();
 
     $selectAuthorBookId = $connection->prepare(
         'SELECT id, book_id, author_id FROM book_author WHERE book_id = :book_id');
-    $selectAuthorBookId->bindValue(':book_id', $originalId);
+    $selectAuthorBookId->bindValue(':book_id', $book->id);
     $selectAuthorBookId->execute();
 
     $i = 0;
@@ -209,13 +209,12 @@ function editBook($title, $author1id, $author2id, $grade, $originalId, $is_read)
            $stmt2->bindValue(':Id', $row['id']);
            $stmt2->execute();
 
-
        }
 
     }
 
 }
-function editAuthor($firstName, $lastName, $grade, $originalId){
+function editAuthor(Author $author){
 
     $connection = new PDO(address, username, parool,
         [PDO::ATTR_ERRMODE => PDO::ERRMODE_EXCEPTION]);
@@ -224,10 +223,10 @@ function editAuthor($firstName, $lastName, $grade, $originalId){
         set firstName = :firstName, lastName = :lastName, author_grade = :grade
         WHERE id = :originalId
         ');
-    $edAut1->bindValue(':firstName', $firstName);
-    $edAut1->bindValue(':lastName', $lastName);
-    $edAut1->bindValue(':grade', $grade);
-    $edAut1->bindValue(':originalId', $originalId);
+    $edAut1->bindValue(':firstName', $author->firstName);
+    $edAut1->bindValue(':lastName', $author->lastName);
+    $edAut1->bindValue(':grade', $author->authorGrade);
+    $edAut1->bindValue(':originalId', $author->id);
     $edAut1->execute();
 
 }

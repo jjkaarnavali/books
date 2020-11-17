@@ -9,18 +9,18 @@ error_reporting(E_ALL ^ E_NOTICE);
 $messageFirst = "";
 $messageSecond = "";
 
-if ($_SERVER["REQUEST_METHOD"] === "POST"){
+if ($_SERVER["REQUEST_METHOD"] === "GET"){
 
 
 
-    $firstName = isset($_POST["firstName"])
-        ? trim($_POST["firstName"])
+    $firstName = isset($_GET["firstName"])
+        ? trim($_GET["firstName"])
         : "";
-    $lastName = isset($_POST["lastName"])
-        ? trim($_POST["lastName"])
+    $lastName = isset($_GET["lastName"])
+        ? trim($_GET["lastName"])
         : "";
-    $grade = isset($_POST["grade"])
-        ? $_POST["grade"]
+    $grade = isset($_GET["grade"])
+        ? $_GET["grade"]
         : 0;
 
     $author = new Author($firstName, $lastName, $grade, '');
@@ -45,14 +45,25 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
     }
 
 }
-$errors = [$messageFirst, $messageSecond];
 if ($messageFirst == "" && $messageSecond == ""){
     $errors = [];
+}elseif ($messageFirst != "" && $messageSecond == ""){
+    $errors = [$messageFirst];
+}elseif ($messageFirst == "" && $messageSecond != ""){
+    $errors = [$messageSecond];
+}else{
+    $errors = [$messageFirst, $messageSecond];
 }
+if ($_GET['newAuthor'] === 'new'){
+    $errors = [];
+}
+
 $data = [
     'errors' => $errors,
     'author' => $author,
+    'contentPath' => 'author-add.html',
+    'cmd' => 'save_author_add'
 ];
-print renderTemplate('tpl/author-add.html', $data);
+print renderTemplate('tpl/main.html', $data);
 
 

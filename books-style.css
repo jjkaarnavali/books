@@ -26,7 +26,13 @@
 }
 
 
+.score-filled {
+    color: darkorange;
+}
 
+.score-empty {
+    color: gray;
+}
 
 thead {
     text-align: left;

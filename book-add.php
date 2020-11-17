@@ -11,52 +11,43 @@ $message = "";
 $author1 = 0;
 $author2 = 0;
 
-if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
-    $input = isset($_POST["title"])
-        ? $_POST["title"]
-        : "";
 
-    $inputread = isset($_POST["isRead"])
-        ? $_POST["isRead"]
-        : false;
-    $inputgrade = isset($_POST["grade"])
-        ? $_POST["grade"]
-        : 0;
+if ($_SERVER["REQUEST_METHOD"] === "GET"){
+
 
     $dto = new AuthorDao();
     $authors = $dto->getAuthorsPosts();
     $author1 = '';
     $author2 = '';
     foreach ($authors as $author){
-        if ($author->id === $_POST["author1"]){
+        if ($author->id === $_GET["author1"]){
             $author1 = $author->firstName . ' ' . $author->lastName;
         }
-        if ($author->id === $_POST["author2"]){
+        if ($author->id === $_GET["author2"]){
             $author2 = $author->firstName . ' ' . $author->lastName;
         }
     }
 
-    $title = isset($_POST["title"])
-        ? trim($_POST["title"])
+    $title = isset($_GET["title"])
+        ? trim($_GET["title"])
         : "";
-    $isRead = isset($_POST["isRead"])
-        ? $_POST["isRead"]
+    $isRead = isset($_GET["isRead"])
+        ? $_GET["isRead"]
         : 0;
-    $grade = isset($_POST["grade"])
-        ? $_POST["grade"]
-        : 0;
+    $grade = $_GET["grade"];
+
 
 
     $book = new Book($title, $grade, $isRead, '', $author1, $author2);
 
-    if (strlen($input) < 3 || strlen($input) > 23){
+    if (strlen($title) < 3 || strlen($title) > 23 ){
 
         $message = "Pealkiri peab sisaldama 3 kuni 23 märki!";
 
     }else{
 
-        addBook($book, $_POST["author1"], $_POST["author2"]);
+        addBook($book, $_GET["author1"], $_GET["author2"]);
 
         header("Location: index.php?message=success");
 
@@ -64,16 +55,20 @@ if ($_SERVER["REQUEST_METHOD"] === "POST"){
 
 }
 
+
 $dto = new AuthorDao();
 $authors = $dto->getAuthorsPosts();
+
+if ($_GET['newBook'] === "new"){
+    $message = '';
+}
 
 $data = [
         'errors' => $message,
         'authors' => $authors,
-        'book' => $book
+        'book' => $book,
+        'cmd' => 'save_book_add',
+        'contentPath' => 'book-add.html'
 ];
-print renderTemplate('tpl/book-add.html', $data);
-
-
-?>
+print renderTemplate('tpl/main.html', $data);
 

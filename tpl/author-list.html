@@ -1,0 +1,33 @@
+<div id="message-block" tpl-if="$message">
+    <tpl>
+        {{ $message }}
+    </tpl>
+</div>
+
+<table class="contents-list">
+    <thead>
+    <tr>
+        <th>Eesnimi</th>
+        <th>Perekonnanimi</th>
+        <th>Hinne</th>
+    </tr>
+    </thead>
+    <tbody>
+
+    <tr tpl-foreach="$authors as $author">
+        <td><a href="edit-author.php?id={{$author->id}}">{{$author->firstName}}</a></td>
+
+
+        <td>{{$author->lastName}}</td>
+        <td class="score-empty" tpl-if="$author->firstName != ''">
+            <tpl tpl-foreach="range(1, 5) as $grade" tpl-trim-contents>
+                <span
+                        tpl-class="score-filled if $author->authorGrade >= $grade">&#9733;
+                </span>
+            </tpl>
+        </td>
+
+    </tr>
+
+    </tbody>
+</table>
