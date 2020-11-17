@@ -1,5 +1,5 @@
 <?php
-require_once 'authorDao.php';
+require_once 'AuthorDao.php';
 require_once 'vendor/tpl.php';
 $message = "";
 error_reporting(E_ALL ^ E_NOTICE);
